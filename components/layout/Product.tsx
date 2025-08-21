@@ -35,14 +35,14 @@ export default function Product({
           className="rounded-2xl w-full"
         />
       </CardHeader>
-      <CardContent>
-        <CardTitle>{title.slice(0, 10)}</CardTitle>
-        <p>$ {price}</p>
-        <p>{description.slice(0, 50)}</p>
+      <CardContent className="space-y-2">
+        <CardTitle className="line-clamp-1">{title}</CardTitle>
+        <p className="text-base font-semibold">$ {price} </p>
+        <p className="text-sm line-clamp-2 text-neutral-500">{description}</p>
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <Link href={`/:${id}`}>View Details</Link>
+          <Link href={`/${id}`}>View Details</Link>
         </Button>
       </CardFooter>
     </Card>

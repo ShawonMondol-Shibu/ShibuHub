@@ -12,14 +12,13 @@ export default function Navbar() {
     <nav>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href={"/"}>Home</Link>
-            </NavigationMenuLink>
-            <NavigationMenuLink asChild>
-              <Link href={"/"}>Products</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <NavigationMenuItem key={i}>
+              <NavigationMenuLink asChild>
+                <Link href={"/"}>Home</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
         </NavigationMenuList>
       </NavigationMenu>
     </nav>
