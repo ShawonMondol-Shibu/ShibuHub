@@ -1,25 +1,29 @@
 "use client";
-import { Header } from "@/components/layout/Header";
-import Product from "@/components/layout/Product";
-import { useEffect, useState } from "react";
+// import { Header } from "@/components/layout/Header";
+import Product, { cardType } from "@/components/layout/Product";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const [items, setItems] = useState([]);
+  const getData = async () => {
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+    return res.json();
+  };
 
-  useEffect(() => {
-    fetch("https://fakestoreapi.in/api/products")
-      .then((res) => res.json())
-      .then((res) => setItems(res.products));
-  }, []);
-  console.log(items);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["items"],
+    queryFn: getData,
+  });
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
+  console.log(data);
   return (
     <main>
-      <Header data={items}/>
+      {/* <Header data={[]} /> */}
       <section className="container m-auto grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-20 px-5 mt-10">
-        {!items == null ? (
+        {!data == null ? (
           <h2 className="text-5xl font-semibold w-fit">Product is not found</h2>
         ) : (
-          items.map((item) => {
+          data?.map((item: cardType) => {
             const { id, image, title, description, price } = item;
             return (
               <Product
@@ -34,7 +38,6 @@ export default function Home() {
           })
         )}
       </section>
-
     </main>
   );
 }
