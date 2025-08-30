@@ -32,17 +32,17 @@ export default function Product({
           height={300}
           src={image || "/images/image.png"}
           alt={title}
-          className="rounded-2xl object-fill m-auto"
+          className="rounded-2xl object-cover m-auto"
         />
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         <CardTitle className="line-clamp-1">{title}</CardTitle>
         <p className="text-base font-semibold">$ {price} </p>
         <p className="text-sm line-clamp-2 text-neutral-500">{description}</p>
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <Link href={`/${id}`}>View Details</Link>
+          <Link href={`/${id}`}>Buy Now</Link>
         </Button>
       </CardFooter>
     </Card>
