@@ -26,13 +26,13 @@ export default function Product({
 }: cardType) {
   return (
     <Card className="w-full max-w-max hover:shadow-lg hover:scale-105 ease-in-out transition-all duration-300 m-auto">
-      <CardHeader>
+      <CardHeader className="w-80 h-80 m-auto">
         <Image
           width={300}
           height={300}
           src={image || "/images/image.png"}
           alt={title}
-          className="rounded-2xl w-full"
+          className="rounded-2xl object-fill m-auto"
         />
       </CardHeader>
       <CardContent className="space-y-2">

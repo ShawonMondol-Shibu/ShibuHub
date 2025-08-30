@@ -8,14 +8,20 @@ import {
 import Link from "next/link";
 
 export default function Navbar() {
+  const navLinks = [
+    { name: "Home", url: "/" },
+    { name: "Products", url: "/product" },
+    { name: "About us", url: "/about" },
+    { name: "Contact Me", url: "/contact" },
+  ];
   return (
     <nav>
       <NavigationMenu>
         <NavigationMenuList>
-          {Array.from({ length: 5 }).map((_, i) => (
+          {navLinks.map((nav, i) => (
             <NavigationMenuItem key={i}>
-              <NavigationMenuLink asChild>
-                <Link href={"/"}>Home</Link>
+              <NavigationMenuLink asChild active>
+                <Link href={nav.url}>{nav.name}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           ))}
