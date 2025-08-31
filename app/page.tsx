@@ -1,5 +1,4 @@
 "use client";
-import Electronics from "@/components/layout/home/Electronics";
 import { Header } from "@/components/layout/home/Header";
 import OurProducts from "@/components/layout/home/OurProducts";
 import Services from "@/components/layout/home/Services";
@@ -20,7 +19,6 @@ export default function Home() {
       <Header headerData={data?.products} />
       <OurProducts productsData={data?.products} />
       <Services />
-      <Electronics/>
     </main>
   );
 }

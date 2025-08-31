@@ -1,10 +1,10 @@
-import { CardTitle } from "@/components/ui/card";
 import React from "react";
+import Electronics from "./Electronics";
 
 export default function Services() {
   return (
-    <div className="mt-20">
-      <CardTitle className="text-5xl text-center">Services</CardTitle>
+    <div className="mt-40">
+     <Electronics/>
     </div>
   );
 }
