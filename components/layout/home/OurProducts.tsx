@@ -7,11 +7,11 @@ interface productsDataType {
 
 export default function OurProducts({ productsData }: productsDataType) {
   return (
-    <main className="mt-10">
+    <main className="mt-20">
       <section>
         <CardTitle className="text-5xl text-center">Our Products</CardTitle>
       </section>
-      <section className="container m-auto grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-20 px-5 mt-10">
+      <section className="container m-auto grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-20 px-5 mt-20">
         {!productsData == null ? (
           <h2 className="text-5xl font-semibold w-fit">Product is not found</h2>
         ) : (

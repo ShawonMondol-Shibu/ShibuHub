@@ -23,8 +23,8 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 left-0 z-50 bg-white flex items-center justify-between">
       <NavigationMenuItem className="text-5xl p-1" asChild>
-        <Link href={"/"} >
-          <FcShop className="drop-shadow-md "/>
+        <Link href={"/"}>
+          <FcShop className="drop-shadow-md " />
         </Link>
       </NavigationMenuItem>
       <NavigationMenu className="z-50">
