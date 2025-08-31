@@ -1,0 +1,19 @@
+{
+  "customer_services": [
+    {
+      "service": "Easy Returns",
+      "details": "30-day return policy on all items",
+      "applicable_to": ["electronics", "jewelry", "clothing"]
+    },
+    {
+      "service": "Price Match Guarantee",
+      "details": "We'll match any competitor's price",
+      "applicable_to": ["electronics"]
+    },
+    {
+      "service": "Product Consultation",
+      "details": "Expert advice before purchase",
+      "applicable_to": ["electronics", "jewelry"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "title": "Free Tech Support",
+      "description": "24/7 technical assistance for all electronic devices",
+      "icon": "headphones",
+      "category": "support"
+    },
+    {
+      "id": 2,
+      "title": "Device Setup Service",
+      "description": "Professional installation and configuration",
+      "icon": "settings",
+      "category": "installation"
+    },
+    {
+      "id": 3,
+      "title": "Extended Warranty",
+      "description": "2-year additional coverage beyond manufacturer warranty",
+      "icon": "shield",
+      "category": "protection"
+    }
+  ]
+}
