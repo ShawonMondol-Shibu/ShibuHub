@@ -5,8 +5,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -83,8 +81,8 @@ export function Header({ headerData }: HeaderProps) {
           })}
         </CarouselContent>
         {/* <span className="flex absolute bottom-0 left-[50%]"> */}
-        <CarouselPrevious />
-        <CarouselNext />
+        {/*<CarouselPrevious />
+        <CarouselNext />*/}
         {/* </span> */}
       </Carousel>
     </header>

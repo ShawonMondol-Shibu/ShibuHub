@@ -7,7 +7,6 @@ import {
   NavigationMenuList,
 } from "../ui/navigation-menu";
 import Link from "next/link";
-import { FaAngellist } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { FcShop } from "react-icons/fc";
 import { ModeToggle } from "../modeToggle";
@@ -23,9 +22,9 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 left-0 z-50 bg-transparent backdrop-blur-2xl flex items-center justify-between">
-      <NavigationMenuItem className="text-5xl p-1" asChild>
+      <NavigationMenuItem className=" p-1" asChild>
         <Link href={"/"}>
-          <FcShop className="drop-shadow-md " />
+          <FcShop className="drop-shadow-md" size={65} />
         </Link>
       </NavigationMenuItem>
       <NavigationMenu className="z-50">
@@ -48,7 +47,7 @@ export default function Navbar() {
         </NavigationMenuList>
       </NavigationMenu>
       <NavigationMenuItem className="text-5xl p-1" asChild>
-        <ModeToggle/>
+        <ModeToggle />
       </NavigationMenuItem>
     </nav>
   );
