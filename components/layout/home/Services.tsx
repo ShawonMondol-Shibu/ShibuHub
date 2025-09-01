@@ -1,10 +1,12 @@
 import React from "react";
 import Electronics from "./Electronics";
+import ShippingCards from "./Shipping";
 
 export default function Services() {
   return (
-    <div className="mt-40">
+    <div className="container m-auto mt-40">
      <Electronics/>
+     <ShippingCards/>
     </div>
   );
 }

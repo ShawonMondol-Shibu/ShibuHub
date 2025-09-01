@@ -1,4 +1,4 @@
-import { electronicType, itemType, services } from "@/components/services/electronics";
+import { services } from "@/components/services/electronics";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -7,33 +7,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LucideProps } from "lucide-react";
 
 import React from "react";
-export interface electronicType {
-  title: string;
-  id: number;
-  description: string;
-  category: string;
-  icon: LucideProps;
-}
-
 
 export default function Electronics() {
-
   return (
     <main>
       <CardTitle className="text-center text-5xl">
         Electronics-Specific Services
       </CardTitle>
-      <section className="flex items-center justify-center gap-20 mt-20">
-        {services.map((item:electronicType) => {
+      <section className="grid grid-cols-1 md:grid-cols-3 items-center gap-6 mt-20">
+        {services.map((item) => {
           const { id, title, category, description } = item;
           return (
-            <Card key={id} className="max-w-70 text-center">
+            <Card
+              key={id}
+              className="max-w-max m-auto text-center hover:shadow-2xl transition-shadow duration-300 ease-in"
+            >
               <CardHeader>
-             <item.icon size={70} className="m-auto"/>
-                
+                <item.icon size={70} className="m-auto" />
               </CardHeader>
               <CardContent>
                 <CardTitle>{title}</CardTitle>
@@ -42,7 +34,7 @@ export default function Electronics() {
               <CardFooter>
                 <Badge
                   variant={"secondary"}
-                  className="m-auto bg-indigo-300 text-white"
+                  // className="m-auto bg-indigo-300 text-white"
                 >
                   {category}
                 </Badge>

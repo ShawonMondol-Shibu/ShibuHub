@@ -1,5 +1,5 @@
-{
-  "customer_services": [
+export const 
+  customer_services= [
     {
       "service": "Easy Returns",
       "details": "30-day return policy on all items",
@@ -16,4 +16,3 @@
       "applicable_to": ["electronics", "jewelry"]
     }
   ]
-}

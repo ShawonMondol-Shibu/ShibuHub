@@ -1,5 +1,5 @@
-{
-  "shipping_services": [
+export const 
+  shipping_services= [
     {
       "id": 1,
       "name": "Standard Shipping",
@@ -22,4 +22,3 @@
       "description": "Available in select cities"
     }
   ]
-}
