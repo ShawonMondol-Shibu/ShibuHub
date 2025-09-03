@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Provider from "@/components/provider/Provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Footer } from "@/components/layout/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Lato font config
+const lato = Lato({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "700"], // চাইলে weight যোগ করতে পারো
+  variable: "--font-lato", // css variable name
 });
 
 export const metadata: Metadata = {
@@ -23,15 +20,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <Provider>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${lato.variable} antialiased`}>
+        <Provider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -42,8 +37,8 @@ export default function RootLayout({
             {children}
             <Footer />
           </ThemeProvider>
-        </body>
-      </html>
-    </Provider>
+        </Provider>
+      </body>
+    </html>
   );
 }

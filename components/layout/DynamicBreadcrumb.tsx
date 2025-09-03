@@ -15,9 +15,9 @@ export function DynamicBreadcrumb() {
   console.log(pageName);
   return (
     <div className="relative m-auto">
-      <i className="w-full h-5 bg-indigo-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
+      <i className="w-full h-5 bg-indigo-500 blur-xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
 
-      <Breadcrumb className="py-10 px-5 bg-transparent z-10 backdrop-blur-xl">
+      <Breadcrumb className="py-10 px-5 bg-transparent z-10 ">
         <BreadcrumbList className="">
           <BreadcrumbItem>
             <BreadcrumbLink href="/" className="text-lg font-semibold">

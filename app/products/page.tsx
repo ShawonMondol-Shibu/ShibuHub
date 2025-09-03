@@ -1,7 +1,6 @@
 "use client";
 import Product, { cardType } from "@/components/layout/Product";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
@@ -33,7 +32,7 @@ export default function Page() {
   if (isError) return <p>Error: {(error as Error).message}</p>;
 
   const categorys = ["tv", "audio", "laptop", "mobile", "gaming", "appliances"];
-  const handleCategory = (e) => {
+  const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const categoryBlue = e.currentTarget.value;
     setCategory(categoryBlue);
@@ -43,23 +42,21 @@ export default function Page() {
   return (
     <main className="my-10">
       <section className="container m-auto px-5 space-y-5">
-        <Card className=" transition-all duration-200 ease-in  hover:scale-105 hover:shadow-2xl shadow-indigo-300 rounded-2xl">
-          <CardContent className="flex items-center justify-center gap-4">
-            <Input placeholder="Search favourite product" />
-            <Button variant={"outline"} size={"icon"}>
-              <Search />
-            </Button>
-          </CardContent>
-        </Card>
+        <span className="flex items-center justify-center gap-4 p-2 rounded-xl transition-all duration-200 ease-in  hover:scale-105 hover:shadow-2xl shadow-indigo-300">
+          <Input placeholder="Search favourite product" />
+          <Button variant={"outline"} size={"icon"}>
+            <Search />
+          </Button>
+        </span>
         <span className="flex flex-wrap items-center gap-5">
-          {categorys.map((category) => (
+          {categorys.map((cat) => (
             <Button
-              key={category}
-              variant={"outline"}
-              value={category}
+              key={cat}
+              variant={cat === category ? "default" : "outline"}
+              value={cat}
               onClick={handleCategory}
             >
-              {category}
+              {cat}
             </Button>
           ))}
         </span>
