@@ -8,7 +8,6 @@ import {
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -42,7 +41,7 @@ export default function Page() {
   };
 
   return (
-    <div className="my-10">
+    <main className="my-10">
       <section className="container m-auto px-5 space-y-5">
         <Card className=" transition-all duration-200 ease-in  hover:scale-105 hover:shadow-2xl shadow-indigo-300 rounded-2xl">
           <CardContent className="flex items-center justify-center gap-4">
@@ -103,6 +102,6 @@ export default function Page() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </div>
+    </main>
   );
 }
