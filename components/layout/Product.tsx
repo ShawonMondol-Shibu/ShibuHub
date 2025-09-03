@@ -28,8 +28,8 @@ export default function Product({
 }: cardType) {
   const [favourite, setFavourite] = useState(false);
   return (
-    <Card className="w-full max-w-max hover:shadow-2xl hover:scale-105 ease-in transition-all duration-300 m-auto group relative">
-      <i className="w-10/12 h-20 group-hover:bg-indigo-800 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-300 ease-out"></i>
+    <Card className="w-full max-w-max hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
+      <i className="w-10/12 h-20 group-hover:bg-indigo-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
       <div className="z-10 backdrop-blur-3xl">
         <CardHeader className="relative flex flex-col  items-center justify-center h-80">
           <Button

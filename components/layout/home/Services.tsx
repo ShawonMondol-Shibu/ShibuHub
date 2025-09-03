@@ -4,7 +4,7 @@ import ShippingCards from "./Shipping";
 
 export default function Services() {
   return (
-    <div className="container m-auto mt-40 pt-40 h-screen">
+    <div className="container m-auto mt-60">
       <Electronics />
       <ShippingCards />
     </div>
