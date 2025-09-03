@@ -45,8 +45,8 @@ export function Header({ headerData }: HeaderProps) {
                         alt={title}
                         className="m-auto"
                       />
-                      <hgroup className="space-y-5 w-xl m-auto">
-                        <CardTitle className="text-5xl text-indigo-950 font-bold leading-16 line-clamp-2">
+                      <hgroup className="space-y-5 w-xl m-auto text-wrap">
+                        <CardTitle className="lg:text-5xl text-indigo-950 font-bold leading-16 line-clamp-2">
                           {title}
                         </CardTitle>
                         <p className="font-bold text-indigo-950">{model}</p>
