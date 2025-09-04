@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import Product, { type cardType } from "@/components/layout/Product";
 import type React from "react";
