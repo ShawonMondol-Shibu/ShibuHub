@@ -16,7 +16,7 @@ export interface cardType {
   image: string;
   title: string;
   description: string;
-  price: string;
+  price: number;
 }
 
 export default function Product({
