@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FcShop } from "react-icons/fc";
-import { ModeToggle } from "@/components/modeToggle";
+
 
 export default function Navbar() {
   const pathName = usePathname();
@@ -87,7 +87,10 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center">
-              <ModeToggle />
+              <Avatar>
+  <AvatarImage src="https://github.com/shadcn.png" />
+  <AvatarFallback>CN</AvatarFallback>
+</Avatar>
             </div>
           </div>
         </div>
