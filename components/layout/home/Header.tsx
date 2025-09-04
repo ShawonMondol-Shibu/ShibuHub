@@ -93,7 +93,7 @@ export function Header({ headerData }: HeaderProps) {
                             className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                             asChild
                           >
-                            <Link href={`/products/${id}`}>Get It Now</Link>
+                            <Link href={`/${id}`}>Get It Now</Link>
                           </Button>
                         </div>
                       </div>

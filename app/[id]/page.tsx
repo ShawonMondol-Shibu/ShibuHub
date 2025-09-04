@@ -16,6 +16,8 @@ import {
   RotateCcw,
 } from "lucide-react";
 import Product from "@/components/layout/Product";
+import { useState } from "react";
+import { useParams } from "next/navigation";
 
 type ProductType = {
   id: number;
@@ -85,14 +87,17 @@ const dummyReviews: Review[] = [
   },
 ];
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
+  const [favourite, setFavourite] = useState(false);
+  const params = useParams();
+  const id = params.id as string;
   const {
     data: product,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["product", params.id],
-    queryFn: () => fetchProduct(params.id),
+    queryKey: ["product", id],
+    queryFn: () => fetchProduct(id),
   });
 
   const { data: similarProducts } = useQuery({
@@ -191,7 +196,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </div>
 
             {/* Price */}
-            <div className="text-3xl font-bold text-primary">
+            <div className="text-3xl font-bold text-indigo-500">
               ${price.toFixed(2)}
             </div>
 
@@ -206,12 +211,29 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             {/* Actions */}
             <div className="space-y-4">
               <div className="flex gap-3">
-                <Button size="lg" className="flex-1">
+                <Button
+                  variant={"outline"}
+                  size="lg"
+                  className="flex-1 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
+                >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Add to Cart
                 </Button>
-                <Button variant="outline" size="lg">
-                  <Heart className="h-5 w-5" />
+
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  onClick={() => setFavourite(true)}
+                  asChild
+                  // className={`size-6`}
+                >
+                  <Heart
+                    className={
+                      favourite
+                        ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
+                        : "stroke-2"
+                    }
+                  />
                 </Button>
               </div>
 
