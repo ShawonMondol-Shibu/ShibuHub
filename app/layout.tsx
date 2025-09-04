@@ -3,7 +3,7 @@ import { Lato } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Provider from "@/components/provider/Provider";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import { Footer } from "@/components/layout/Footer";
 
 // Lato font config
@@ -27,16 +27,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${lato.variable} antialiased`}>
         <Provider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+     
             <Navbar />
             {children}
             <Footer />
-          </ThemeProvider>
+         
         </Provider>
       </body>
     </html>
