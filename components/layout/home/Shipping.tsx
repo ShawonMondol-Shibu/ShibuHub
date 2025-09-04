@@ -19,7 +19,7 @@ export default function ShippingCards() {
         {shipping_services.map((service) => (
           <Card
             key={service.id}
-            className="rounded-2xl shadow-md hover:shadow-xl transition duration-300"
+            className="rounded-2xl shadow-none border-none hover:shadow-xl transition duration-300"
           >
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-center">

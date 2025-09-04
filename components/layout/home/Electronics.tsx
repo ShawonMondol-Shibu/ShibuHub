@@ -2,8 +2,9 @@ import { services } from "@/components/services/electronics";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
+  CardAction,
   CardContent,
-  CardFooter,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,23 +23,21 @@ export default function Electronics() {
           return (
             <Card
               key={id}
-              className="max-w-max m-auto text-center hover:shadow-2xl transition-shadow duration-300 ease-in"
+              className="w-full max-w-96 m-auto text-center hover:shadow-2xl transition-shadow duration-300 ease-in"
             >
               <CardHeader>
                 <item.icon size={70} className="m-auto" />
+                <CardAction></CardAction>
+                <Badge variant={"secondary"} className="m-auto">
+                  {category}
+                </Badge>
               </CardHeader>
               <CardContent>
                 <CardTitle>{title}</CardTitle>
-                <p>{description}</p>
+                <CardDescription>
+                  <p>{description}</p>
+                </CardDescription>
               </CardContent>
-              <CardFooter>
-                <Badge
-                  variant={"secondary"}
-                  // className="m-auto bg-indigo-300 text-white"
-                >
-                  {category}
-                </Badge>
-              </CardFooter>
             </Card>
           );
         })}
