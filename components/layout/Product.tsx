@@ -37,7 +37,7 @@ export default function Product({
             size={"icon"}
             onClick={() => setFavourite(true)}
             asChild
-            className={`size-6  absolute top-0 right-5 `}
+            className={`size-6  absolute top-0 right-5 z-50`}
           >
             <Heart
               className={
