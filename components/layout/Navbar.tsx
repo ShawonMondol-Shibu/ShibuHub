@@ -21,6 +21,7 @@ export default function Navbar() {
     { name: "Products", url: "/products" },
     { name: "About us", url: "/about" },
     { name: "Contact Me", url: "/contact" },
+    { name: "Dashboard", url: "/dashboard" },
   ];
 
   return (

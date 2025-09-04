@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Provider from "@/components/provider/Provider";
 
 // Lato font config

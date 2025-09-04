@@ -1,13 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output:"export",
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com',
-        pathname: '/fir-auth-1c3bc.appspot.com/**',
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/fir-auth-1c3bc.appspot.com/**",
       },
     ],
   },
