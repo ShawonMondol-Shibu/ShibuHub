@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FcShop } from "react-icons/fc";
-
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function Navbar() {
   const pathName = usePathname();
