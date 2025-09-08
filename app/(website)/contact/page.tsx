@@ -4,7 +4,7 @@ import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="container min-h-screen  m-auto bg-white">
       <DynamicBreadcrumb />
 
       <div className="container mx-auto px-6 py-12">

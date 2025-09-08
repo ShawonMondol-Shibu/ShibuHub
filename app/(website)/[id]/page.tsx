@@ -10,8 +10,8 @@ import ProductPage from "./ProductPage";
 //   }));
 // }
 
-export default async function Page({ params }) {
-  const { id } = await params;
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
   console.log(id);
   return <ProductPage id={id} />;
 }

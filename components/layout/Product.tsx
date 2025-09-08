@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "../ui/button";
 import {
@@ -9,7 +11,7 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import { Heart } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface cardType {
   id: number;
@@ -26,25 +28,52 @@ export default function Product({
   id,
   price,
 }: cardType) {
-  const [favourite, setFavourite] = useState(false);
+  const [favourites, setFavourites] = useState<
+    { id: number; heart: boolean }[]
+  >([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("favourites");
+    if (stored) {
+      setFavourites(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (favourites.length > 0) {
+      localStorage.setItem("favourites", JSON.stringify(favourites));
+    }
+  }, [favourites]);
+
+  const isFav = favourites.some((f) => f.id === id);
+
   const handleFavourite = () => {
-    setFavourite(true);
+    let updated;
+    if (isFav) {
+      // remove from favourites
+      updated = favourites.filter((f) => f.id !== id);
+    } else {
+      // add to favourites
+      updated = [...favourites, { id, heart: true }];
+    }
+    setFavourites(updated);
   };
+
   return (
     <Card className="w-full max-w-max hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
       <i className="w-10/12 h-20 group-hover:bg-indigo-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
       <div className="z-10 backdrop-blur-3xl">
-        <CardHeader className="relative flex flex-col  items-center justify-center h-80">
+        <CardHeader className="relative flex flex-col items-center justify-center h-80">
           <Button
             variant={"ghost"}
             size={"icon"}
             onClick={handleFavourite}
             asChild
-            className={`size-6  absolute top-0 right-5 z-50`}
+            className="size-6 absolute top-0 right-5 z-50"
           >
             <Heart
               className={
-                favourite
+                isFav
                   ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
                   : "stroke-2"
               }
@@ -69,7 +98,7 @@ export default function Product({
           <Button
             variant={"outline"}
             asChild
-            className="mt-2 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
+            className="mt-2 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500 border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
           >
             <Link href={`/${id}`}>Buy Now</Link>
           </Button>
