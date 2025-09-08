@@ -43,21 +43,18 @@ type Review = {
 };
 
 const fetchProduct = async (id: string): Promise<ProductType> => {
-  const res = await fetch(`https://fakestoreapi.coom/products/${id}`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch product");
-  }
+  const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+
   const data = await res.json();
   return data;
 };
+const data = await fetchProduct("2");
+console.log(data);
 
 const fetchSimilarProducts = async (): Promise<ProductType[]> => {
   const res = await fetch("https://fakestoreapi.com/products");
-  if (!res.ok) {
-    throw new Error("Failed to fetch similar products");
-  }
-  const data = await res.json();
-  return data;
+
+  return res.json();
 };
 
 const dummyReviews: Review[] = [
@@ -149,9 +146,9 @@ export default function ProductPage({ id }: ProductPageProps) {
                 src={
                   image || "/placeholder.svg?height=600&width=600&query=product"
                 }
-                alt={title}
                 fill
-                className="object-cover transition-transform hover:scale-105 duration-300"
+                alt={title}
+                className="object-contain transition-transform hover:scale-105 duration-300"
                 priority
               />
             </div>

@@ -27,6 +27,9 @@ export default function Product({
   price,
 }: cardType) {
   const [favourite, setFavourite] = useState(false);
+  const handleFavourite = () => {
+    setFavourite(true);
+  };
   return (
     <Card className="w-full max-w-max hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
       <i className="w-10/12 h-20 group-hover:bg-indigo-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
@@ -35,7 +38,7 @@ export default function Product({
           <Button
             variant={"ghost"}
             size={"icon"}
-            onClick={() => setFavourite(true)}
+            onClick={handleFavourite}
             asChild
             className={`size-6  absolute top-0 right-5 z-50`}
           >
@@ -53,7 +56,7 @@ export default function Product({
               height={300}
               src={image || "/images/image.png"}
               alt={title}
-              className="m-auto object-cover mix-blend-lighten drop-shadow-xl drop-shadow-zinc-400"
+              className="m-auto object-cover mix-blend-lighten drop-shadow-xl drop-shadow-zinc-300"
             />
           </div>
         </CardHeader>

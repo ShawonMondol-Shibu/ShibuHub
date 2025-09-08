@@ -27,7 +27,7 @@ type HeaderProps = {
 
 export function Header({ headerData }: HeaderProps) {
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
+    <header className="h-[calc(100dvh-64px)] relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
       <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
       <Carousel className="container mx-auto relative z-10">
         <CarouselContent>
@@ -105,7 +105,7 @@ export function Header({ headerData }: HeaderProps) {
           })}
         </CarouselContent>
 
-        <div className="flex justify-center mt-8 gap-4">
+        <div className="flex justify-center  gap-4">
           <CarouselPrevious className="relative translate-y-0 left-0 bg-white/80 backdrop-blur-sm border-indigo-200 hover:bg-indigo-50" />
           <CarouselNext className="relative translate-y-0 right-0 bg-white/80 backdrop-blur-sm border-indigo-200 hover:bg-indigo-50" />
         </div>
