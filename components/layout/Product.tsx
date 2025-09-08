@@ -47,13 +47,15 @@ export default function Product({
               }
             />
           </Button>
-          <Image
-            width={300}
-            height={300}
-            src={image || "/images/image.png"}
-            alt={title}
-            className="m-auto mix-blend-lighten"
-          />
+          <div className="w-48">
+            <Image
+              width={300}
+              height={300}
+              src={image || "/images/image.png"}
+              alt={title}
+              className="m-auto object-cover mix-blend-lighten drop-shadow-xl drop-shadow-zinc-400"
+            />
+          </div>
         </CardHeader>
         <CardContent className="space-y-1 z-50">
           <CardTitle className="line-clamp-1">{title}</CardTitle>

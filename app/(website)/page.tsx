@@ -41,11 +41,11 @@ export default function Home() {
       </div>
     );
 
-  console.log(data?.products);
+  console.log(data);
   return (
     <main>
-      <Header headerData={data?.products} />
-      <OurProducts productsData={data?.products} />
+      <Header headerData={data} />
+      <OurProducts productsData={data} />
       <Services />
       <LicenseSection />
     </main>

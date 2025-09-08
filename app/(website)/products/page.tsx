@@ -15,19 +15,17 @@ import {
 } from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Loader2, AlertCircle } from "lucide-react";
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function Page() {
-  const [category, setCategory] = useState("mobile");
+  // const [category, setCategory] = useState("mobile");
   const getData = async () => {
-    const res = await fetch(
-      `https://fakestoreapi.in/api/products/category?type=${category}&limit=16`,
-    );
+    const res = await fetch(`https://fakestoreapi.com/products`);
     return res.json();
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["products", category],
+    queryKey: ["products"],
     queryFn: getData,
   });
 
@@ -61,12 +59,15 @@ export default function Page() {
     );
 
   const categorys = ["tv", "audio", "laptop", "mobile", "gaming", "appliances"];
-  const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const categoryBlue = e.currentTarget.value;
-    setCategory(categoryBlue);
-    console.log(categoryBlue);
-  };
+  // const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   const categoryBlue = e.currentTarget.value;
+  //   setCategory(categoryBlue);
+  //   console.log(categoryBlue);
+  // };
+  //
+  //
+  console.log(data[0]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
@@ -106,14 +107,16 @@ export default function Page() {
             {categorys.map((cat) => (
               <Button
                 key={cat}
-                variant={cat === category ? "default" : "outline"}
+                // variant={cat === category ? "default" : "outline"}
                 value={cat}
-                onClick={handleCategory}
-                className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-                  cat === category
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg scale-105"
-                    : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300"
-                }`}
+                // onClick={handleCategory}
+                // className={`px-6 py-2 rounded-full font-medium transition-all duration-300
+                //  // {
+                //  //    cat === category
+                //  //      ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg scale-105"
+                //  //      : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300"
+                //  //  }
+                //   `}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </Button>
@@ -123,7 +126,7 @@ export default function Page() {
       </section>
 
       <section className="container mx-auto px-6 py-16">
-        {!data?.products || data?.products.length === 0 ? (
+        {!data || data.length === 0 ? (
           <div className="text-center py-20">
             <div className="max-w-md mx-auto">
               <div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -133,11 +136,12 @@ export default function Page() {
                 No Products Found
               </h2>
               <p className="text-gray-600 mb-8">
-                We couldn't find any products in the {category} category. Try
-                selecting a different category.
+                We couldn't find any products in the
+                {/*{category} */}
+                category. Try selecting a different category.
               </p>
               <Button
-                onClick={() => setCategory("mobile")}
+                // onClick={() => setCategory("mobile")}
                 className="bg-indigo-600 hover:bg-indigo-700"
               >
                 Browse Mobile Products
@@ -146,7 +150,7 @@ export default function Page() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {data.products.map((item: cardType) => {
+            {data.map((item: cardType) => {
               const { id, image, title, description, price } = item;
               return (
                 <div key={id} className="group">

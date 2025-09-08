@@ -43,21 +43,21 @@ type Review = {
 };
 
 const fetchProduct = async (id: string): Promise<ProductType> => {
-  const res = await fetch(`https://fakestoreapi.in/api/products/${id}`);
+  const res = await fetch(`https://fakestoreapi.coom/products/${id}`);
   if (!res.ok) {
     throw new Error("Failed to fetch product");
   }
   const data = await res.json();
-  return data.product;
+  return data;
 };
 
 const fetchSimilarProducts = async (): Promise<ProductType[]> => {
-  const res = await fetch("https://fakestoreapi.in/api/products?limit=4");
+  const res = await fetch("https://fakestoreapi.com/products");
   if (!res.ok) {
     throw new Error("Failed to fetch similar products");
   }
   const data = await res.json();
-  return data.products;
+  return data;
 };
 
 const dummyReviews: Review[] = [
@@ -92,12 +92,8 @@ const dummyReviews: Review[] = [
 
 export default function ProductPage({ id }: ProductPageProps) {
   const [favourite, setFavourite] = useState(false);
-  
-  const {
-    data: product,
-    isLoading,
-    error,
-  } = useQuery({
+
+  const { data, isLoading, error } = useQuery({
     queryKey: ["product", id],
     queryFn: () => fetchProduct(id),
   });
@@ -127,7 +123,7 @@ export default function ProductPage({ id }: ProductPageProps) {
     );
   }
 
-  if (!product) {
+  if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card className="p-6">
@@ -137,7 +133,7 @@ export default function ProductPage({ id }: ProductPageProps) {
     );
   }
 
-  const { image, title, price, model, description, category, brand } = product;
+  const { image, title, price, model, description, category, brand } = data;
   const averageRating =
     dummyReviews.reduce((acc, review) => acc + review.rating, 0) /
     dummyReviews.length;

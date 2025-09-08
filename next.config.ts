@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "storage.googleapis.com",
-        pathname: "/fir-auth-1c3bc.appspot.com/**",
+        hostname: "fakestoreapi.com",
       },
     ],
   },
