@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 export function DynamicBreadcrumb() {
   const path = usePathname();
@@ -20,8 +21,10 @@ export function DynamicBreadcrumb() {
       <Breadcrumb className="py-10 px-5 bg-transparent z-10 ">
         <BreadcrumbList className="">
           <BreadcrumbItem>
-            <BreadcrumbLink href="/" className="text-lg font-semibold">
+            <BreadcrumbLink  className="text-lg font-semibold" asChild>
+            <Link href="/">
               Home
+            </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

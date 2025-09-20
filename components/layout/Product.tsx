@@ -90,7 +90,9 @@ export default function Product({
           </div>
         </CardHeader>
         <CardContent className="space-y-1 z-50">
-          <CardTitle className="line-clamp-1">{title}</CardTitle>
+          <CardTitle id="title" className="line-clamp-1">
+            {title}
+          </CardTitle>
           <p className="text-base font-semibold">$ {price} </p>
           <p className="text-sm line-clamp-2 text-neutral-500">{description}</p>
         </CardContent>

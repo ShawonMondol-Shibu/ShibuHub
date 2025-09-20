@@ -28,7 +28,10 @@ export default function RootLayout({
     <main className={`${lato.variable} antialiased`}>
       <Provider>
         <Navbar />
+        <div className="min-h-[70vh]">
+
         {children}
+        </div>
         <Footer />
       </Provider>
     </main>

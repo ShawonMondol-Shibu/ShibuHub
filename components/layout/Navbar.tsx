@@ -9,8 +9,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FcShop } from "react-icons/fc";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useState } from "react";
+import NavbarUser from "./NavbarUser";
 
 export default function Navbar() {
   const pathName = usePathname();
@@ -105,10 +105,7 @@ export default function Navbar() {
             </div>
 
             {/* Avatar */}
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <NavbarUser/>
           </div>
         </div>
 

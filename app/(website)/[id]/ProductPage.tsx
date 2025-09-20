@@ -162,7 +162,9 @@ export default function ProductPage({ id }: ProductPageProps) {
                   {category}
                 </Badge>
               )}
-              <h1 className="text-3xl font-bold text-balance mb-2">{title}</h1>
+              <h1 id="title" className="text-3xl font-bold text-balance mb-2">
+                {title}
+              </h1>
               {model && (
                 <p className="text-muted-foreground text-lg">{model}</p>
               )}

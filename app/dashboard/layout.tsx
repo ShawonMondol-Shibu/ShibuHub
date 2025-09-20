@@ -21,10 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${lato.variable} antialiased`}>
-        <Provider>{children}</Provider>
-      </body>
-    </html>
+    <main className={`${lato.variable} antialiased`}>
+      <Provider>
+        {children}
+        </Provider>
+    </main>
   );
 }
