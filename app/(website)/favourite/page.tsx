@@ -1,11 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { getData } from "@/components/provider/Provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+
+interface favouriteType {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+  quantity?: number;
+}
 
 export default function Page() {
-  const [favourite, setFavourites] = useState<any[]>([]);
+  const [favourite, setFavourites] = useState<favouriteType[]>([]);
 
   const { data, isPending } = useQuery({
     queryKey: ["item"],
@@ -13,32 +28,88 @@ export default function Page() {
   });
 
   useEffect(() => {
-    const store = localStorage.getItem("favourites");
-
     try {
-      if (store && !isPending) {
-        const parseStore = JSON.parse(store);
-        const ids = parseStore.map((item: { id: number }) => item.id);
+      const store = localStorage.getItem("favourites");
+      if (store && !isPending && data) {
+        const parseStore = JSON.parse(store) as { id: number }[];
+        const ids = parseStore.map((item) => item.id);
 
-        console.log(ids);
-        const filterData = data.filter((item:{id:number,title:string, image:string}, i:number) => item.id === ids[i]);
-        setFavourites(filterData);
+        const filterData = data.filter((item: favouriteType) =>
+          ids.includes(item.id)
+        );
+
+        // quantity add kore dila
+        const withQty = filterData.map((item: any) => ({
+          ...item,
+          quantity: 1,
+        }));
+
+        setFavourites(withQty);
       }
     } catch {
       setFavourites([]);
     }
-  }, [data]);
+  }, [data, isPending]);
 
-  console.log(favourite);
+  const handleQuantityChange = (id: number, value: number) => {
+    setFavourites((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: value } : item
+      )
+    );
+  };
+
+  const handleRemove = (id: number) => {
+    setFavourites((prev) => prev.filter((item) => item.id !== id));
+    // localStorage sync
+    const store = localStorage.getItem("favourites");
+    if (store) {
+      const parseStore = JSON.parse(store).filter((item: { id: number }) => item.id !== id);
+      localStorage.setItem("favourites", JSON.stringify(parseStore));
+    }
+  };
 
   return (
     <main className="container m-auto">
       <DynamicBreadcrumb />
       <section>
         {favourite.length > 0 ? (
-          <ul>
+          <ul className="space-y-2">
             {favourite.map((item) => (
-              <li key={item.id}>{item.title}</li>
+              <li key={item.id}>
+                <Card className="w-full max-w-max">
+                  <CardContent className="flex items-center justify-between gap-5">
+                    <Image
+                      src={item.image || "/placeholder.svg"}
+                      alt="product image"
+                      width={50}
+                      height={50}
+                    />
+                    <CardTitle>{item.title}</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <Label>quantity:</Label>
+                      <Input
+                        type="number"
+                        value={item.quantity}
+                        min={1}
+                        onChange={(e) =>
+                          handleQuantityChange(item.id, Number(e.target.value))
+                        }
+                        className="w-16"
+                      />
+                    </div>
+                    <span>price: ${item.price} </span>
+                    <Button
+                      variant={"ghost"}
+                      size={"icon"}
+                      title="remove the product"
+                      onClick={() => handleRemove(item.id)}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </li>
             ))}
           </ul>
         ) : (

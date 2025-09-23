@@ -28,6 +28,7 @@ export default function Product({
   id,
   price,
 }: cardType) {
+  
   const [favourites, setFavourites] = useState<
     { id: number; heart: boolean }[]
   >([]);

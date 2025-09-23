@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ShoppingCart, Heart } from "lucide-react";
@@ -19,20 +19,17 @@ export default function NavbarUser() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("Favourite count:", heart);
-  }, [heart]);
-
   return (
     <Popover>
       <PopoverTrigger>
-        <Avatar>
+        <Avatar className="cursor-pointer">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
 
-      <PopoverContent className="grid gap-2 items-center">
+      <PopoverContent className="w-56 grid gap-2">
+        {/* Profile info */}
         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
@@ -46,37 +43,36 @@ export default function NavbarUser() {
           </div>
         </div>
 
-        <Button
-          variant={"ghost"}
-          asChild
-          className="flex items-center gap-2 justify-between"
-        >
-          <Link href={"/cart"}>
+        {/* Cart */}
+        <Link href="/cart">
+          <Button
+            variant="ghost"
+            className="w-full flex items-center gap-2 justify-between"
+          >
             <span className="flex items-center gap-2">
-              <ShoppingCart />
+              <ShoppingCart className="h-4 w-4" />
               Cart
             </span>
             <span>10</span>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
 
-        <Button
-          variant={"ghost"}
-          asChild
-          className="flex items-center gap-2 justify-between"
-        >
-          <Link href={"/favourite"}>
+        {/* Favourite */}
+        <Link href="/favourite">
+          <Button
+            variant="ghost"
+            className="w-full flex items-center gap-2 justify-between"
+          >
             <span className="flex items-center gap-2">
-              <Heart />
+              <Heart className="h-4 w-4" />
               Favourite
             </span>
             <span>{heart}</span>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
 
-        <Button>
-          Logout
-        </Button>
+        {/* Logout */}
+        <Button className="w-full">Logout</Button>
       </PopoverContent>
     </Popover>
   );
