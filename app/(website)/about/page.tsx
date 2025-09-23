@@ -45,7 +45,7 @@ export default function Page() {
               <div className="flex flex-col lg:flex-row items-center gap-8">
                 <div className="relative">
                   <Image
-                    src="/images/owner.jpg"
+                    src="/images/owner.png"
                     alt="Shawon Mondol Shibu - Owner"
                     width={300}
                     height={300}

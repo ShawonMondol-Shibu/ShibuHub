@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Loader2, AlertCircle } from "lucide-react";
-// import { useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
   // const [category, setCategory] = useState("mobile");
+  const [Pages, setPages] = useState(1);
   const getData = async () => {
     const res = await fetch(`https://fakestoreapi.com/products`);
     return res.json();
@@ -69,6 +70,10 @@ export default function Page() {
   //
   console.log(data[0]);
 
+  const productLimit = 8;
+  const prevPage = Math.ceil(Pages - 1) * productLimit;
+  const nextPage = Pages * productLimit;
+  const paginatedItem = Math.ceil(data.length / productLimit);
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
       <section className="bg-white border-b border-indigo-100">
@@ -150,7 +155,7 @@ export default function Page() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {data.map((item: cardType) => {
+            {data.slice(prevPage, nextPage).map((item: cardType) => {
               const { id, image, title, description, price } = item;
               return (
                 <div key={id} className="group">
@@ -168,7 +173,7 @@ export default function Page() {
         )}
       </section>
 
-      {data?.products && data.products.length > 0 && (
+      {data && data.length > 0 && (
         <section className="bg-white border-t border-indigo-100 py-8">
           <div className="container mx-auto px-6">
             <Pagination>
@@ -176,16 +181,18 @@ export default function Page() {
                 <PaginationItem>
                   <PaginationPrevious
                     href="#"
+                    onClick={()=>setPages(Math.max(Pages-1,1))}
                     className="rounded-xl border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                   />
                 </PaginationItem>
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: paginatedItem }).map((item,i) => (
                   <PaginationItem key={i}>
                     <Button
-                      variant={i === 0 ? "default" : "outline"}
+                      variant={Pages === i+1 ? "default" : "outline"}
+                      
+                      onClick={()=>setPages(i+1)}
                       className={`w-12 h-12 rounded-xl ${
-                        i === 0
-                          ? "bg-indigo-600 hover:bg-indigo-700"
+                        Pages === i+1 ? "bg-indigo-600 hover:bg-indigo-700 text-white"
                           : "border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                       }`}
                     >
@@ -193,12 +200,11 @@ export default function Page() {
                     </Button>
                   </PaginationItem>
                 ))}
-                <PaginationItem>
-                  <PaginationEllipsis className="text-indigo-600" />
-                </PaginationItem>
+
                 <PaginationItem>
                   <PaginationNext
                     href="#"
+                    onClick={()=>setPages(Math.min(Pages+1,paginatedItem))}
                     className="rounded-xl border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                   />
                 </PaginationItem>

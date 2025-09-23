@@ -69,15 +69,15 @@ export default function Product({
             variant={"ghost"}
             size={"icon"}
             onClick={handleFavourite}
-            asChild
-            className="size-6 absolute top-0 right-5 z-50"
+            className="size-9 rounded-full absolute top-0 right-5 z-50"
           >
             <Heart
-              className={
-                isFav
+              className={`
+                ${isFav
                   ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                  : "stroke-2"
-              }
+                  : "stroke-2"} size-5
+                  `}
+              
             />
           </Button>
           <div className="w-48">

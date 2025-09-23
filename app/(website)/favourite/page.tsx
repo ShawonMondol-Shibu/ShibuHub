@@ -38,7 +38,7 @@ export default function Page() {
           ids.includes(item.id)
         );
 
-        // quantity add kore dila
+        
         const withQty = filterData.map((item: any) => ({
           ...item,
           quantity: 1,
@@ -70,9 +70,9 @@ export default function Page() {
   };
 
   return (
-    <main className="container m-auto">
+    <main className="container m-auto ">
       <DynamicBreadcrumb />
-      <section>
+      <section className="my-10">
         {favourite.length > 0 ? (
           <ul className="space-y-2">
             {favourite.map((item) => (
