@@ -3,13 +3,11 @@
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { getData } from "@/components/provider/Provider";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Label } from "@/components/ui/label";
 
 interface favouriteType {
   id: number;
@@ -17,6 +15,7 @@ interface favouriteType {
   image: string;
   price: number;
   quantity?: number;
+  description:string;
 }
 
 export default function Page() {
@@ -38,7 +37,6 @@ export default function Page() {
           ids.includes(item.id)
         );
 
-        
         const withQty = filterData.map((item: any) => ({
           ...item,
           quantity: 1,
@@ -51,13 +49,6 @@ export default function Page() {
     }
   }, [data, isPending]);
 
-  const handleQuantityChange = (id: number, value: number) => {
-    setFavourites((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: value } : item
-      )
-    );
-  };
 
   const handleRemove = (id: number) => {
     setFavourites((prev) => prev.filter((item) => item.id !== id));
@@ -77,27 +68,17 @@ export default function Page() {
           <ul className="space-y-2">
             {favourite.map((item) => (
               <li key={item.id}>
-                <Card className="w-full max-w-max">
+                <Card className="w-full">
                   <CardContent className="flex items-center justify-between gap-5">
                     <Image
                       src={item.image || "/placeholder.svg"}
                       alt="product image"
-                      width={50}
-                      height={50}
+                      width={500}
+                      height={500}
+                      className="w-12 h-12"
                     />
                     <CardTitle>{item.title}</CardTitle>
-                    <div className="flex items-center gap-2">
-                      <Label>quantity:</Label>
-                      <Input
-                        type="number"
-                        value={item.quantity}
-                        min={1}
-                        onChange={(e) =>
-                          handleQuantityChange(item.id, Number(e.target.value))
-                        }
-                        className="w-16"
-                      />
-                    </div>
+                    <CardDescription>{item.description}</CardDescription>
                     <span>price: ${item.price} </span>
                     <Button
                       variant={"ghost"}
