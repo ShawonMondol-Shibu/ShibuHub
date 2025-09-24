@@ -15,6 +15,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Loader2, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import { Toaster } from "sonner";
 
 export default function Page() {
   // const [category, setCategory] = useState("mobile");
@@ -75,6 +76,7 @@ export default function Page() {
   const paginatedItem = Math.ceil(data.length / productLimit);
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
+      <Toaster richColors/>
       <section className="bg-white border-b border-indigo-100">
         <div className="container mx-auto px-6 py-12">
           <div className="text-center mb-8">

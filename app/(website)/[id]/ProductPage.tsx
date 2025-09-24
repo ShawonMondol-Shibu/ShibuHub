@@ -207,7 +207,7 @@ export default function ProductPage({ id }: ProductPageProps) {
 
             {/* Actions */}
             <div className="space-y-4">
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
                 <Button
                   variant={"outline"}
                   size="lg"
@@ -221,14 +221,13 @@ export default function ProductPage({ id }: ProductPageProps) {
                   variant={"ghost"}
                   size={"icon"}
                   onClick={() => setFavourite(true)}
-                  asChild
-                  // className={`size-6`}
                 >
-                  <Heart
+                  <Heart 
+                  
                     className={
-                      favourite
+                      `${favourite
                         ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                        : "stroke-2"
+                        : "stroke-2"} size-6`
                     }
                   />
                 </Button>
