@@ -56,7 +56,7 @@ export default function Page() {
       <DynamicBreadcrumb />
       <section>
         {Cart.map((item: cartType) => (
-          <Card key={item.id} className="w-full max-w-max">
+          <Card key={item.id} className="w-full">
             <CardContent className="flex items-center justify-between gap-5">
               <Image
                 src={item.image || "/placeholder.svg"}

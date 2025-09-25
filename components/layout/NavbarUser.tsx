@@ -5,19 +5,20 @@ import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
+import { storageCart, storageFav } from "@/lib/localStore";
 
 export default function NavbarUser() {
-  const [heart, setHeart] = useState<number>(0);
+  const heart = storageFav().length;
+  const Cart = storageCart().length;
+  const [hearts, setHearts] = useState<number>(0);
+  const [carts, setCarts] = useState<number>(0);
 
   useEffect(() => {
-    try {
-      const store = localStorage.getItem("favourites");
-      const parsed = store ? JSON.parse(store) : [];
-      setHeart(Array.isArray(parsed) ? parsed.length : 0);
-    } catch {
-      setHeart(0);
-    }
-  }, []);
+    if (heart) setHearts(heart);
+
+    if (Cart) setCarts(Cart);
+  }, [Cart, heart]);
+  console.log(storageFav().length);
 
   return (
     <Popover>
@@ -53,7 +54,7 @@ export default function NavbarUser() {
               <ShoppingCart className="h-4 w-4" />
               Cart
             </span>
-            <span>10</span>
+            <span>{carts}</span>
           </Button>
         </Link>
 
@@ -67,7 +68,7 @@ export default function NavbarUser() {
               <Heart className="h-4 w-4" />
               Favourite
             </span>
-            <span>{heart}</span>
+            <span>{hearts}</span>
           </Button>
         </Link>
 
