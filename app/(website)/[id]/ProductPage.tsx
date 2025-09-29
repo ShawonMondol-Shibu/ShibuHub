@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Product from "@/components/layout/Product";
 import { useState } from "react";
+import { toast, Toaster } from "sonner";
 
 type ProductPageProps = {
   id: string;
@@ -31,6 +32,7 @@ type ProductType = {
   description: string;
   category?: string;
   brand?: string;
+  rating: { rate: number; count: number };
 };
 
 type Review = {
@@ -89,6 +91,7 @@ const dummyReviews: Review[] = [
 
 export default function ProductPage({ id }: ProductPageProps) {
   const [favourite, setFavourite] = useState(false);
+  const [carts, setCarts] = useState<{ id: number; quantity: number }[]>([]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["product", id],
@@ -130,10 +133,22 @@ export default function ProductPage({ id }: ProductPageProps) {
     );
   }
 
-  const { image, title, price, model, description, category, brand } = data;
-  const averageRating =
-    dummyReviews.reduce((acc, review) => acc + review.rating, 0) /
-    dummyReviews.length;
+  const { image, title, price, model, description, category, brand, rating } =
+    data;
+
+  const handleCart = () => {
+    toast.success("Add to Cart Added.");
+    const cartData = [...carts, { id: data.id, quantity: 1 }];
+    setCarts(cartData);
+    const cartStore = localStorage.getItem("cart");
+    if (cartStore) {
+      const store = JSON.parse(cartStore);
+      const storeId = store.filter((item) => item.id !== parseInt(id));
+      if (storeId === false) {
+        localStorage.setItem("cart", JSON.stringify(carts));
+      }
+    }
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -180,7 +195,7 @@ export default function ProductPage({ id }: ProductPageProps) {
                   <Star
                     key={i}
                     className={`h-5 w-5 ${
-                      i < Math.floor(averageRating)
+                      i < Math.floor(rating?.rate)
                         ? "fill-yellow-400 text-yellow-400"
                         : "text-muted-foreground"
                     }`}
@@ -188,7 +203,7 @@ export default function ProductPage({ id }: ProductPageProps) {
                 ))}
               </div>
               <span className="text-sm text-muted-foreground">
-                {averageRating.toFixed(1)} ({dummyReviews.length} reviews)
+                {rating?.rate.toFixed(1)} ({rating?.count} reviews)
               </span>
             </div>
 
@@ -211,6 +226,7 @@ export default function ProductPage({ id }: ProductPageProps) {
                 <Button
                   variant={"outline"}
                   size="lg"
+                  onClick={handleCart}
                   className="flex-1 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
@@ -222,13 +238,12 @@ export default function ProductPage({ id }: ProductPageProps) {
                   size={"icon"}
                   onClick={() => setFavourite(true)}
                 >
-                  <Heart 
-                  
-                    className={
-                      `${favourite
+                  <Heart
+                    className={`${
+                      favourite
                         ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                        : "stroke-2"} size-6`
-                    }
+                        : "stroke-2"
+                    } size-6`}
                   />
                 </Button>
               </div>
@@ -330,6 +345,8 @@ export default function ProductPage({ id }: ProductPageProps) {
           </Card>
         )}
       </div>
+
+      <Toaster richColors />
     </main>
   );
 }
