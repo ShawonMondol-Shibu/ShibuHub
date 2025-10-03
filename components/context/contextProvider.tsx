@@ -11,17 +11,15 @@ interface UserContextType {
 }
 
 // Create context with a default value
-export const userContext = createContext<UserContextType | undefined>(
-  undefined,
-);
+export const userContext = createContext<UserContextType | null>(null);
 
 interface ContextProviderProps {
   children: ReactNode;
 }
 
 export default function ContextProvider({ children }: ContextProviderProps) {
-  const [hearts, setHearts] = React.useState<number>(0);
-  const [carts, setCarts] = React.useState<number>(0);
+  const [hearts, setHearts] = React.useState(0);
+  const [carts, setCarts] = React.useState(0);
 
   return (
     <userContext.Provider value={{ carts, hearts, setHearts, setCarts }}>
