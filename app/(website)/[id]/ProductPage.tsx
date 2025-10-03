@@ -16,8 +16,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 import Product from "@/components/layout/Product";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast, Toaster } from "sonner";
+import { userContext } from "@/components/context/contextProvider";
 
 type ProductPageProps = {
   id: string;
@@ -91,7 +92,7 @@ const dummyReviews: Review[] = [
 
 export default function ProductPage({ id }: ProductPageProps) {
   const [favourite, setFavourite] = useState(false);
-  const [carts, setCarts] = useState<{ id: number; quantity: number }[]>([]);
+  const { setCarts } = useContext(userContext);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["product", id],
@@ -137,17 +138,35 @@ export default function ProductPage({ id }: ProductPageProps) {
     data;
 
   const handleCart = () => {
-    toast.success("Add to Cart Added.");
-    const cartData = [...carts, { id: data.id, quantity: 1 }];
-    setCarts(cartData);
+    toast.success("Product added to cart!");
+
+    // check if cart already exists in localStorage
     const cartStore = localStorage.getItem("cart");
+    let newCart = [];
+
     if (cartStore) {
       const store = JSON.parse(cartStore);
-      const storeId = store.filter((item) => item.id !== parseInt(id));
-      if (storeId === false) {
-        localStorage.setItem("cart", JSON.stringify(carts));
+      console.log(store);
+      setCarts(store.length);
+
+      const existingIndex = store.findIndex(
+        (item: { id: number }) => item.id === data.id,
+      );
+
+      if (existingIndex !== -1) {
+        // quantity update
+        store[existingIndex].quantity += 1;
+        newCart = [...store];
+      } else {
+        // new item add
+        newCart = [...store, { id: data.id, quantity: 1 }];
       }
+    } else {
+      // first time add
+      newCart = [{ id: data.id, quantity: 1 }];
     }
+
+    localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
   return (

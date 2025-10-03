@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import { useState, useEffect } from "react";
-import { toast} from "sonner";
+import { toast } from "sonner";
 
 export interface cardType {
   id: number;
@@ -29,7 +29,6 @@ export default function Product({
   id,
   price,
 }: cardType) {
-  
   const [favourites, setFavourites] = useState<
     { id: number; heart: boolean }[]
   >([]);
@@ -54,14 +53,13 @@ export default function Product({
     if (isFav) {
       // remove from favourites
       updated = favourites.filter((f) => f.id !== id);
-      toast.success('Remove to Favourite Successfully.')
+      toast.success("Remove to Favourite Successfully.");
     } else {
       // add to favourites
       updated = [...favourites, { id, heart: true }];
-      toast.success('Add to Favourite Successfully.')
+      toast.success("Add to Favourite Successfully.");
     }
     setFavourites(updated);
-
   };
 
   return (
@@ -77,11 +75,12 @@ export default function Product({
           >
             <Heart
               className={`
-                ${isFav
-                  ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                  : "stroke-2"} size-5
+                ${
+                  isFav
+                    ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
+                    : "stroke-2"
+                } size-5
                   `}
-              
             />
           </Button>
           <div className="w-48">

@@ -1,24 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
-import { storageCart, storageFav } from "@/lib/localStore";
+import { useContext } from "react";
+import { userContext } from "../context/contextProvider";
+
+interface userType {
+  carts: number;
+  hearts: number;
+}
 
 export default function NavbarUser() {
-  const heart = storageFav().length;
-  const Cart = storageCart().length;
-  const [hearts, setHearts] = useState<number>(0);
-  const [carts, setCarts] = useState<number>(0);
-
-  useEffect(() => {
-    if (heart) setHearts(heart);
-
-    if (Cart) setCarts(Cart);
-  }, [Cart, heart]);
-  console.log(storageFav().length);
+  const { carts, hearts } = useContext<userType>(userContext);
 
   return (
     <Popover>

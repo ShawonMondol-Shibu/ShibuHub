@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Provider from "@/components/provider/Provider";
 
 import { Footer } from "@/components/layout/Footer";
+import ContextProvider from "@/components/context/contextProvider";
 
 // Lato font config
 const lato = Lato({
@@ -27,12 +28,11 @@ export default function RootLayout({
     // <html lang="en" suppressHydrationWarning>
     <main className={`${lato.variable} antialiased`}>
       <Provider>
-        <Navbar />
-        <div className="min-h-[70vh]">
-
-        {children}
-        </div>
-        <Footer />
+        <ContextProvider>
+          <Navbar />
+          <div className="min-h-[70vh]">{children}</div>
+          <Footer />
+        </ContextProvider>
       </Provider>
     </main>
     // </html>
