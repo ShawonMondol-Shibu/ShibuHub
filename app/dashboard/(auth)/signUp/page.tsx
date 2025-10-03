@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardTitle } from "@/components/ui/card";
 import { toast, Toaster } from "sonner";
+import Link from "next/link";
 
 interface formType {
   name: string;
@@ -90,7 +91,14 @@ export default function SignUp() {
               )}
             />
           ))}
-          <Button type="submit">Submit</Button>
+          <div className="flex items-center justify-between">
+            <Button variant={"default"} type="submit">
+              Submit
+            </Button>
+            <Button variant={`link`} asChild>
+              <Link href={"/dashboard/signIn"}>sign in</Link>
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
