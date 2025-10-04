@@ -54,14 +54,6 @@ export default function Page() {
     },
   });
 
-  const formInputs = [
-    { name: "firstName", label: "First Name", holder: "Enter first name" },
-    { name: "lastName", label: "First Name", holder: "Enter last name" },
-    { name: "email", label: "Email", holder: "Enter email address" },
-    { name: "password", label: "Password", holder: "Enter you password" },
-    { name: "confirm", label: "Confirm Password", holder: "Confirm Password" },
-  ];
-
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
     toast.success("You are successfully signed up.");
@@ -77,22 +69,73 @@ export default function Page() {
           className="space-y-8 w-lg p-5 border rounded-2xl shadow "
         >
           <CardTitle className="text-center">Sign Up in to ShibuHub</CardTitle>
-          {formInputs.map((inputs: formType) => (
-            <FormField
-              key={inputs.name}
-              control={form.control}
-              name={`${inputs.name}`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{inputs.label}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={inputs.holder} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
+
+          <FormField
+            control={form.control}
+            name={"firstName"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder={`Enter first name`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"lastName"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder={`Enter last name`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"email"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder={`Enter email address`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"password"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder={`Enter you password`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={"confirm"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input placeholder={`Confirm password`} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="flex items-center justify-between">
             <Button variant={"default"} type="submit">
               Submit
