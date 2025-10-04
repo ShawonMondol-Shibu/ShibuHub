@@ -3,15 +3,22 @@ import * as React from "react";
 import { createContext, ReactNode } from "react";
 
 // Define the context value type
-interface UserContextType {
+export interface UserContextType {
   carts: number;
   hearts: number;
-  setHearts: React.Dispatch<React.SetStateAction<number>>;
-  setCarts: React.Dispatch<React.SetStateAction<number>>;
+  setHearts: (value: number) => void;
+  setCarts: (value: number) => void;
 }
 
+const defaultUserContext: UserContextType = {
+  carts: 0,
+  hearts: 0,
+  setCarts: () => {},
+  setHearts: () => {},
+};
 // Create context with a default value
-export const userContext = createContext<UserContextType | null>(null);
+
+export const userContext = createContext<UserContextType>(defaultUserContext);
 
 interface ContextProviderProps {
   children: ReactNode;

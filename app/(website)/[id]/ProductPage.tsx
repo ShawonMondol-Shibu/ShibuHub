@@ -92,7 +92,7 @@ const dummyReviews: Review[] = [
 
 export default function ProductPage({ id }: ProductPageProps) {
   const [favourite, setFavourite] = useState(false);
-  const { setCarts } = useContext<{ setCarts: number }>(userContext);
+  const { setCarts } = useContext(userContext);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["product", id],
