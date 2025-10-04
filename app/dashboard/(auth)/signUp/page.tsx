@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { CardTitle } from "@/components/ui/card";
 import { toast, Toaster } from "sonner";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 interface formType {
   name: string;
   label: string;
@@ -42,6 +42,7 @@ const formSchema = z
   });
 
 export default function SignUp() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,9 +62,10 @@ export default function SignUp() {
     { name: "confirm", label: "Confirm Password", holder: "Confirm Password" },
   ];
 
-  const handleSubmit = () => {
-    toast.success("You are successfully signd up.");
-    return (location.href = "/dashboard/signIn");
+  const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+    toast.success("You are successfully signed up.");
+    router.push("/dashboard");
   };
 
   return (
@@ -95,9 +97,12 @@ export default function SignUp() {
             <Button variant={"default"} type="submit">
               Submit
             </Button>
-            <Button variant={`link`} asChild>
-              <Link href={"/dashboard/signIn"}>sign in</Link>
-            </Button>
+            <small>
+              I already have an account
+              <Button variant={`link`} asChild>
+                <Link href={"/dashboard/signIn"}>sign in</Link>
+              </Button>
+            </small>
           </div>
         </form>
       </Form>
