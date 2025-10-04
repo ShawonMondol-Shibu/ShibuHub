@@ -41,7 +41,7 @@ const formSchema = z
     }
   });
 
-export default function SignUp() {
+export default function Page() {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,8 +70,8 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center ">
-      <Toaster richColors />
       <Form {...form}>
+        <Toaster richColors />
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           className="space-y-8 w-lg p-5 border rounded-2xl shadow "
@@ -99,7 +99,7 @@ export default function SignUp() {
             </Button>
             <small>
               I already have an account
-              <Button variant={`link`} asChild>
+              <Button variant={`link`} size={"sm"} asChild>
                 <Link href={"/dashboard/signIn"}>sign in</Link>
               </Button>
             </small>

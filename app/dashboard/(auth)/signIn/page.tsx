@@ -26,7 +26,7 @@ const formSchema = z.object({
     .max(100, { message: "Password must be less than 100 characters." }),
 });
 
-export default function SignIn() {
+export default function Page() {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
