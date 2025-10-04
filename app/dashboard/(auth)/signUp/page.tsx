@@ -81,7 +81,7 @@ export default function Page() {
             <FormField
               key={inputs.name}
               control={form.control}
-              name={inputs.name}
+              name={`${inputs.name}`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{inputs.label}</FormLabel>
