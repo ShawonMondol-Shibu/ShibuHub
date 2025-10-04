@@ -1,5 +1,12 @@
+import { Card, CardContent } from "@/components/ui/card";
 import * as React from "react";
 
 export default function Page() {
-  return <div>All Clients</div>;
+  return (
+    <div>
+      <Card>
+        <CardContent>All Clients</CardContent>
+      </Card>
+    </div>
+  );
 }
