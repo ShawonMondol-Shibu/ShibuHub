@@ -65,7 +65,7 @@ export default function SignUp() {
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
     toast.success("You are successfully signed up.");
-    router.push("/dashboard");
+    router.push("/dashboard/signIn");
   };
 
   return (
