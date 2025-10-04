@@ -7,13 +7,8 @@ import Link from "next/link";
 import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 
-interface userType {
-  carts: number;
-  hearts: number;
-}
-
 export default function NavbarUser() {
-  const { carts, hearts } = useContext<userType>(userContext);
+  const { carts, hearts } = useContext(userContext);
 
   return (
     <Popover>

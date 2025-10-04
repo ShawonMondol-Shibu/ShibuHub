@@ -17,11 +17,6 @@ import { CardTitle } from "@/components/ui/card";
 import { toast, Toaster } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-interface formType {
-  name: string;
-  label: string;
-  holder: string;
-}
 
 const formSchema = z
   .object({
