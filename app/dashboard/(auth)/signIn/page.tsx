@@ -44,12 +44,12 @@ export default function Page() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen px-4">
       <Form {...form}>
         <Toaster richColors />
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="min-w-md border p-4 rounded-2xl space-y-8"
+          className="w-md border p-4 rounded-2xl space-y-8"
         >
           <CardTitle className="text-center">Sign In to ShibuHub</CardTitle>
           <FormField

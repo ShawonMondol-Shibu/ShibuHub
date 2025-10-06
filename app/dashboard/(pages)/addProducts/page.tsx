@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -34,10 +35,17 @@ export default function Page() {
       price: 0,
     },
   });
+
+  const handleSubmit = (value: z.infer<typeof formSchema>) => {
+    console.log(value);
+  };
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen px-4">
       <Form {...form}>
-        <form>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="w-lg space-y-8 p-4 border rounded-2xl shadow"
+        >
           <FormField
             control={form.control}
             name={`name`}
@@ -116,6 +124,8 @@ export default function Page() {
               </FormItem>
             )}
           />
+
+          <Button>Add Product</Button>
         </form>
       </Form>
     </div>

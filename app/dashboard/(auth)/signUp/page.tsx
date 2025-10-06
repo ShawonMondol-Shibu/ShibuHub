@@ -56,7 +56,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <Form {...form}>
         <Toaster richColors />
         <form
