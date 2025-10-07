@@ -23,8 +23,8 @@ export default function Page() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-indigo-50">
-      <div className="container mx-auto px-4 py-8">
+    <main className="min-h-screen bg-gradient-to-br from-white to-indigo-50 pt-5">
+      <div className="container mx-auto">
         <DynamicBreadcrumb />
 
         {/* Hero Section */}

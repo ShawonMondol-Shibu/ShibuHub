@@ -5,6 +5,7 @@ import Provider from "@/components/provider/Provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
+import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 
 // Lato font config
 const lato = Lato({
@@ -37,6 +38,7 @@ export default function RootLayout({
           <AppSidebar variant="inset" />
           <SidebarInset>
             <SiteHeader />
+
             {children}
           </SidebarInset>
         </SidebarProvider>

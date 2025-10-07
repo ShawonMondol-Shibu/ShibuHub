@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -118,7 +119,10 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Product Description</FormLabel>
                 <FormControl>
-                  <Input placeholder={`Enter product description`} {...field} />
+                  <Textarea
+                    placeholder={`Enter product description`}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
