@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import "../globals.css";
 import Provider from "@/components/provider/Provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
+
 
 // Lato font config
 const lato = Lato({
   subsets: ["latin"],
-  weight: ["400", "700"], // চাইলে weight যোগ করতে পারো
-  variable: "--font-lato", // css variable name
+  weight: ["400", "700"], 
+  variable: "--font-lato", 
 });
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import "../globals.css";
+// import "../globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Provider from "@/components/provider/Provider";
 
