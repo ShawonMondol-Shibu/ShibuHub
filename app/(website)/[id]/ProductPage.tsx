@@ -107,7 +107,7 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
   } = data;
 
   const isHeart = hearts.find((item: number) => item === data.id);
-  const isCart = carts.find((item: { id: number }) => item.id === data.id);
+  const isCart = carts.find((carts:{id:number})=>carts.id === id);
   console.log(isCart);
 
   return (
@@ -186,8 +186,8 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
                 <Button
                   variant={isCart ? "outline" : "default"}
                   size="lg"
+                  disabled={isCart ? true : false}
                   onClick={() => handleCart(id, image, title, price)}
-                  disabled={isCart}
                   className={
                     ""
                     // "flex-1 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
