@@ -16,9 +16,11 @@ import {
   RotateCcw,
 } from "lucide-react";
 import Product from "@/components/layout/Product";
-import { useContext, useState } from "react";
-import { toast, Toaster } from "sonner";
+import { useContext } from "react";
+import { Toaster } from "sonner";
 import { userContext } from "@/components/context/contextProvider";
+import { cn } from "@/lib/utils";
+import { dummyReviews } from "./reviews";
 
 type ProductPageProps = {
   id: string;
@@ -36,23 +38,12 @@ type ProductType = {
   rating: { rate: number; count: number };
 };
 
-type Review = {
-  id: number;
-  name: string;
-  rating: number;
-  comment: string;
-  date: string;
-  avatar?: string;
-};
-
 const fetchProduct = async (id: string): Promise<ProductType> => {
   const res = await fetch(`https://fakestoreapi.com/products/${id}`);
 
   const data = await res.json();
   return data;
 };
-const data = await fetchProduct("2");
-console.log(data);
 
 const fetchSimilarProducts = async (): Promise<ProductType[]> => {
   const res = await fetch("https://fakestoreapi.com/products");
@@ -60,43 +51,12 @@ const fetchSimilarProducts = async (): Promise<ProductType[]> => {
   return res.json();
 };
 
-const dummyReviews: Review[] = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    rating: 5,
-    comment:
-      "Absolutely love this product! The quality is outstanding and it arrived faster than expected.",
-    date: "2024-01-15",
-    avatar: "/diverse-woman-portrait.png",
-  },
-  {
-    id: 2,
-    name: "Mike Chen",
-    rating: 4,
-    comment:
-      "Great value for money. Works exactly as described. Would definitely recommend to others.",
-    date: "2024-01-10",
-    avatar: "/thoughtful-man.png",
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    rating: 5,
-    comment:
-      "Perfect! This exceeded my expectations. The design is beautiful and very functional.",
-    date: "2024-01-08",
-    avatar: "/woman-2.jpg",
-  },
-];
-
-export default function ProductPage({ id }: ProductPageProps) {
-  const [favourite, setFavourite] = useState(false);
-  const { setCarts } = useContext(userContext);
+export default function ProductPage({ id: pageId }: ProductPageProps) {
+  const { carts, hearts, handleCart, handleHeart } = useContext(userContext);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => fetchProduct(id),
+    queryKey: ["product", pageId],
+    queryFn: () => fetchProduct(pageId),
   });
 
   const { data: similarProducts } = useQuery({
@@ -134,40 +94,21 @@ export default function ProductPage({ id }: ProductPageProps) {
     );
   }
 
-  const { image, title, price, model, description, category, brand, rating } =
-    data;
+  const {
+    id,
+    image,
+    title,
+    price,
+    model,
+    description,
+    category,
+    brand,
+    rating,
+  } = data;
 
-  const handleCart = () => {
-    toast.success("Product added to cart!");
-
-    // check if cart already exists in localStorage
-    const cartStore = localStorage.getItem("cart");
-    let newCart = [];
-
-    if (cartStore) {
-      const store = JSON.parse(cartStore);
-      console.log(store);
-      setCarts(store.length);
-
-      const existingIndex = store.findIndex(
-        (item: { id: number }) => item.id === data.id,
-      );
-
-      if (existingIndex !== -1) {
-        // quantity update
-        store[existingIndex].quantity += 1;
-        newCart = [...store];
-      } else {
-        // new item add
-        newCart = [...store, { id: data.id, quantity: 1 }];
-      }
-    } else {
-      // first time add
-      newCart = [{ id: data.id, quantity: 1 }];
-    }
-
-    localStorage.setItem("cart", JSON.stringify(newCart));
-  };
+  const isHeart = hearts.find((item: number) => item === data.id);
+  const isCart = carts.find((item: { id: number }) => item.id === data.id);
+  console.log(isCart);
 
   return (
     <main className="min-h-screen bg-background">
@@ -243,26 +184,31 @@ export default function ProductPage({ id }: ProductPageProps) {
             <div className="space-y-4">
               <div className="flex gap-3 items-center">
                 <Button
-                  variant={"outline"}
+                  variant={isCart ? "outline" : "default"}
                   size="lg"
-                  onClick={handleCart}
-                  className="flex-1 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
+                  onClick={() => handleCart(id, image, title, price)}
+                  disabled={isCart}
+                  className={
+                    ""
+                    // "flex-1 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500  border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
+                  }
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
-                  Add to Cart
+                  {isCart ? "Cart Added" : "Add to Cart"}
                 </Button>
 
                 <Button
                   variant={"ghost"}
                   size={"icon"}
-                  onClick={() => setFavourite(true)}
+                  onClick={() => handleHeart(data.id)}
                 >
                   <Heart
-                    className={`${
-                      favourite
+                    className={cn(
+                      "size-6",
+                      isHeart
                         ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                        : "stroke-2"
-                    } size-6`}
+                        : "stroke-2",
+                    )}
                   />
                 </Button>
               </div>
@@ -285,6 +231,7 @@ export default function ProductPage({ id }: ProductPageProps) {
           </div>
         </div>
 
+        {/* Reviews */}
         <Card className="mb-12">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -338,6 +285,7 @@ export default function ProductPage({ id }: ProductPageProps) {
           </CardContent>
         </Card>
 
+        {/* Similar Products */}
         {similarProducts && similarProducts.length > 0 && (
           <Card>
             <CardHeader>

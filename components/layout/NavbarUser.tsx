@@ -44,7 +44,7 @@ export default function NavbarUser() {
               <ShoppingCart className="h-4 w-4" />
               Cart
             </span>
-            <span>{carts}</span>
+            <span>{carts.length}</span>
           </Button>
         </Link>
 
@@ -58,7 +58,7 @@ export default function NavbarUser() {
               <Heart className="h-4 w-4" />
               Favourite
             </span>
-            <span>{hearts}</span>
+            <span>{hearts.length}</span>
           </Button>
         </Link>
 

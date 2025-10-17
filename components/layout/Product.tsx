@@ -11,8 +11,9 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import { Heart } from "lucide-react";
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
+import { useContext } from "react";
+import { cn } from "@/lib/utils";
+import { userContext } from "../context/contextProvider";
 
 export interface cardType {
   id: number;
@@ -29,38 +30,41 @@ export default function Product({
   id,
   price,
 }: cardType) {
-  const [favourites, setFavourites] = useState<
-    { id: number; heart: boolean }[]
-  >([]);
+  const { hearts, handleHeart } = useContext(userContext);
+  const isHeart = hearts.find((item: number) => item === id);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("favourites");
-    if (stored) {
-      setFavourites(JSON.parse(stored));
-    }
-  }, []);
+  // const [favourites, setFavourites] = useState<
+  //   { id: number; heart: boolean }[]
+  // >([]);
 
-  useEffect(() => {
-    if (favourites.length > 0) {
-      localStorage.setItem("favourites", JSON.stringify(favourites));
-    }
-  }, [favourites]);
+  // useEffect(() => {
+  //   const stored = localStorage.getItem("favourites");
+  //   if (stored) {
+  //     setFavourites(JSON.parse(stored));
+  //   }
+  // }, []);
 
-  const isFav = favourites.some((f) => f.id === id);
+  // useEffect(() => {
+  //   if (favourites.length > 0) {
+  //     localStorage.setItem("favourites", JSON.stringify(favourites));
+  //   }
+  // }, [favourites]);
 
-  const handleFavourite = () => {
-    let updated;
-    if (isFav) {
-      // remove from favourites
-      updated = favourites.filter((f) => f.id !== id);
-      toast.success("Remove to Favourite Successfully.");
-    } else {
-      // add to favourites
-      updated = [...favourites, { id, heart: true }];
-      toast.success("Add to Favourite Successfully.");
-    }
-    setFavourites(updated);
-  };
+  // const isFav = favourites.some((f) => f.id === id);
+
+  // const handleFavourite = () => {
+  //   let updated;
+  //   if (isFav) {
+  //     // remove from favourites
+  //     updated = favourites.filter((f) => f.id !== id);
+  //     toast.success("Remove to Favourite Successfully.");
+  //   } else {
+  //     // add to favourites
+  //     updated = [...favourites, { id, heart: true }];
+  //     toast.success("Add to Favourite Successfully.");
+  //   }
+  //   setFavourites(updated);
+  // };
 
   return (
     <Card className=" w-full max-w-md hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
@@ -70,17 +74,16 @@ export default function Product({
           <Button
             variant={"secondary"}
             size={"icon"}
-            onClick={handleFavourite}
+            onClick={() => handleHeart(id)}
             className="size-9 rounded-full absolute top-0 right-5 z-50"
           >
             <Heart
-              className={`
-                ${
-                  isFav
-                    ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                    : "stroke-2"
-                } size-5
-                  `}
+              className={cn(
+                "size-5",
+                isHeart
+                  ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
+                  : "stroke-2",
+              )}
             />
           </Button>
           <div className="w-48">
