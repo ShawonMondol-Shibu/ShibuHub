@@ -1,44 +1,53 @@
 "use client";
 import * as React from "react";
 import { createContext, ReactNode } from "react";
+import { toast } from "sonner";
 
+interface heartsType {
+  id: number;
+  image: string;
+  title: string;
+  price: number;
+}
+interface cartsType {
+  id: number;
+  image: string;
+  title: string;
+  quantity: number;
+  price: number;
+}
 // Define the context value type
 export interface UserContextType {
-  carts: {
-    id: number;
-    image: string;
-    title: string;
-    quantity: number;
-    price: number;
-  }[];
-  hearts: number[];
-  setHearts: (value: number[]) => void;
-  setCarts: React.Dispatch<
-    React.SetStateAction<
-      {
-        id: number;
-        image: string;
-        title: string;
-        quantity: number;
-        price: number;
-      }[]
-    >
-  >;
+  carts: cartsType[];
+  hearts: heartsType[];
+  totalPrice: number;
+  setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
+  setHearts: React.Dispatch<React.SetStateAction<heartsType[]>>;
+  setCarts: React.Dispatch<React.SetStateAction<cartsType[]>>;
   handleCart: (id: number, image: string, title: string, price: number) => void;
   handleQuantity: (id: number, quantity: number) => void;
-  handleRemove: (id: number) => void;
-  handleHeart: (id: number) => void;
+  handleRemoveCart: (id: number) => void;
+  handleHeart: (
+    id: number,
+    image: string,
+    title: string,
+    price: number
+  ) => void;
+  handleRemoveHeart: (id: number) => void;
 }
 
 const defaultUserContext: UserContextType = {
   carts: [],
   hearts: [],
-  setHearts: () => {},
+  totalPrice: 0,
+  setTotalPrice: () => {},
   setCarts: () => {},
+  setHearts: () => {},
   handleCart: () => {},
   handleHeart: () => {},
   handleQuantity: () => {},
-  handleRemove: () => {},
+  handleRemoveCart: () => {},
+  handleRemoveHeart: () => {},
 };
 // Create context with a default value
 
@@ -49,55 +58,96 @@ interface ContextProviderProps {
 }
 
 export default function ContextProvider({ children }: ContextProviderProps) {
-  const [hearts, setHearts] = React.useState<number[]>([]);
-  const [carts, setCarts] = React.useState<
-    {
-      id: number;
-      image: string;
-      title: string;
-      quantity: number;
-      price: number;
-    }[]
-  >([]);
+  const [hearts, setHearts] = React.useState<heartsType[]>([]);
+  const [carts, setCarts] = React.useState<cartsType[]>([]);
+  const [totalPrice, setTotalPrice] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    const storedCarts = localStorage.getItem("carts");
+    const storedHearts = localStorage.getItem("hearts");
+    if (storedCarts) setCarts(JSON.parse(storedCarts));
+    if (storedHearts) setHearts(JSON.parse(storedHearts));
+  }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem("carts", JSON.stringify(carts));
+    localStorage.setItem('hearts', JSON.stringify(hearts))
+  }, [carts,hearts]);
 
   const handleCart = (
     id: number,
     image: string,
     title: string,
-    price: number,
+    price: number
   ) => {
-    setCarts([...carts, { id, image, title, quantity: 1, price }]);
-  };
-
-  const handleHeart = (id: number) => {
-    setHearts([...hearts, id]);
+    const existCart = carts.find((cart: { id: number }) => cart.id === id);
+    if (existCart) {
+      toast.error("Already added to cart");
+      return;
+    } else {
+      setCarts([...carts, { id, image, title, quantity: 1, price }]);
+      toast.success("Added to cart");
+    }
   };
 
   const handleQuantity = (id: number, quantity: number) => {
     setCarts(
-      carts.map((item) => (item.id === id ? { ...item, quantity } : item)),
+      carts.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
     if (quantity === 0) {
       setCarts(carts.filter((item) => item.id !== id));
+      toast.warning("Removed from cart");
     }
   };
 
-  const handleRemove = (id: number) => {
+  const handleRemoveCart = (id: number) => {
     setCarts(carts.filter((item) => item.id !== id));
+    toast.warning("Removed from cart");
   };
 
+  const handleHeart = (
+    id: number,
+    image: string,
+    title: string,
+    price: number
+  ) => {
+    const existHeart = hearts.find((heart: { id: number }) => heart.id === id);
+    if (existHeart) {
+      toast.error("Already added to favourite");
+      return;
+    } else {
+      setHearts([...hearts, { id, image, title, price }]);
+      toast.success("Added to favourite");
+    }
+  };
+
+  const handleRemoveHeart = (id: number) => {
+    setHearts(hearts.filter((heart: { id: number }) => heart.id !== id));
+    toast.warning("Removed from favourite");
+  };
+
+
+  React.useEffect(() => {
+    const price = carts.reduce((total, item) => total + item.price * item.quantity, 0);
+    setTotalPrice(price.toFixed(2) as unknown as number );
+  }, [carts]);
+
   console.log(carts, ...carts);
+  console.log(hearts);
   return (
     <userContext.Provider
       value={{
         carts,
         hearts,
-        setHearts,
+        totalPrice,
         setCarts,
+        setHearts,
+        setTotalPrice,
         handleCart,
         handleHeart,
         handleQuantity,
-        handleRemove,
+        handleRemoveCart,
+        handleRemoveHeart,
       }}
     >
       {children}

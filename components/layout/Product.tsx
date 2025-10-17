@@ -31,40 +31,7 @@ export default function Product({
   price,
 }: cardType) {
   const { hearts, handleHeart } = useContext(userContext);
-  const isHeart = hearts.find((item: number) => item === id);
-
-  // const [favourites, setFavourites] = useState<
-  //   { id: number; heart: boolean }[]
-  // >([]);
-
-  // useEffect(() => {
-  //   const stored = localStorage.getItem("favourites");
-  //   if (stored) {
-  //     setFavourites(JSON.parse(stored));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (favourites.length > 0) {
-  //     localStorage.setItem("favourites", JSON.stringify(favourites));
-  //   }
-  // }, [favourites]);
-
-  // const isFav = favourites.some((f) => f.id === id);
-
-  // const handleFavourite = () => {
-  //   let updated;
-  //   if (isFav) {
-  //     // remove from favourites
-  //     updated = favourites.filter((f) => f.id !== id);
-  //     toast.success("Remove to Favourite Successfully.");
-  //   } else {
-  //     // add to favourites
-  //     updated = [...favourites, { id, heart: true }];
-  //     toast.success("Add to Favourite Successfully.");
-  //   }
-  //   setFavourites(updated);
-  // };
+  const isHeart = hearts.find((heart: {id:number}) => heart.id === id);
 
   return (
     <Card className=" w-full max-w-md hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
@@ -74,7 +41,7 @@ export default function Product({
           <Button
             variant={"secondary"}
             size={"icon"}
-            onClick={() => handleHeart(id)}
+            onClick={() => handleHeart(id, image, title, price)}
             className="size-9 rounded-full absolute top-0 right-5 z-50"
           >
             <Heart

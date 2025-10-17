@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import Product from "@/components/layout/Product";
 import { useContext } from "react";
-import { Toaster } from "sonner";
 import { userContext } from "@/components/context/contextProvider";
 import { cn } from "@/lib/utils";
 import { dummyReviews } from "./reviews";
@@ -106,7 +105,7 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
     rating,
   } = data;
 
-  const isHeart = hearts.find((item: number) => item === data.id);
+  const isHeart = hearts.find((heart: {id:number}) => heart.id === id);
   const isCart = carts.find((carts:{id:number})=>carts.id === id);
   console.log(isCart);
 
@@ -200,7 +199,7 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
                 <Button
                   variant={"ghost"}
                   size={"icon"}
-                  onClick={() => handleHeart(data.id)}
+                  onClick={() => handleHeart(id,image,title,price)}
                 >
                   <Heart
                     className={cn(
@@ -313,7 +312,7 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
         )}
       </div>
 
-      <Toaster richColors />
+      
     </main>
   );
 }

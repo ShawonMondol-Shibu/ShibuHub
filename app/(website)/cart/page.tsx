@@ -16,7 +16,7 @@ interface cartItemType {
 }
 
 export default function Page() {
-  const { carts, handleQuantity, handleRemove } = useContext(userContext);
+  const { carts, totalPrice, handleQuantity, handleRemoveCart } = useContext(userContext);
 
   return (
     <main className="container m-auto px-5">
@@ -60,7 +60,7 @@ export default function Page() {
                   variant="destructive"
                   size="icon"
                   title="remove the product"
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => handleRemoveCart(item.id)}
                 >
                   <Trash2 />
                 </Button>
@@ -69,6 +69,14 @@ export default function Page() {
           ))
         )}
       </section>
+
+      <Card className="w-full max-w-md ml-auto mt-10">
+        <CardContent className="flex items-center justify-between">
+
+          <CardTitle>Total Amount:</CardTitle>
+          <span className="text-lg font-bold">{totalPrice}</span>
+        </CardContent>
+      </Card>
     </main>
   );
 }
