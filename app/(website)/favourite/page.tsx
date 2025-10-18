@@ -3,10 +3,12 @@ import { userContext } from "@/components/context/contextProvider";
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import { toast } from "sonner";
 
 interface favouriteType {
   id: number;
@@ -16,7 +18,16 @@ interface favouriteType {
 }
 
 export default function Page() {
-  const { hearts, handleRemoveHeart } = useContext(userContext);
+  const { carts, hearts, handleRemoveHeart } = useContext(userContext);
+  const router = useRouter();
+  const handleBuy = (id: number) => {
+    const isInCart = carts.find((item) => item.id === id);
+    if (isInCart) {
+      toast.error("Item is already in the cart");
+    } else {
+      router.push(`/${id}`);
+    }
+  };
 
   return (
     <main className="container m-auto ">
@@ -37,8 +48,11 @@ export default function Page() {
                     />
                     <CardTitle>{item.title}</CardTitle>
                     <span>price: ${item.price} </span>
-                    <Button variant={"outline"}>
-                      <Link href={`/${item.id}`}>Buy Again</Link>
+                    <Button
+                      variant={"outline"}
+                      onClick={() => handleBuy(item.id)}
+                    >
+                      Buy Again
                     </Button>
                     <Button
                       variant={"ghost"}
@@ -46,7 +60,11 @@ export default function Page() {
                       title="remove the product"
                       onClick={() => handleRemoveHeart(item.id)}
                     >
-                      <Trash2 />
+                      <Trash2
+                        className={cn(
+                          "size-5 drop-shadow-sm drop-shadow-red-300 stroke-red-500"
+                        )}
+                      />
                     </Button>
                   </CardContent>
                 </Card>

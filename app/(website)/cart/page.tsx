@@ -3,8 +3,10 @@ import { userContext } from "@/components/context/contextProvider";
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 
 interface cartItemType {
@@ -16,7 +18,9 @@ interface cartItemType {
 }
 
 export default function Page() {
-  const { carts, totalPrice, handleQuantity, handleRemoveCart } = useContext(userContext);
+  const { carts, totalPrice, handleQuantity, handleRemoveCart } =
+    useContext(userContext);
+    const router = useRouter();
 
   return (
     <main className="container m-auto px-5">
@@ -57,12 +61,12 @@ export default function Page() {
                   <b>${(item.price * item.quantity).toFixed(2)}</b>
                 </span>
                 <Button
-                  variant="destructive"
+                  variant={"ghost"}
                   size="icon"
                   title="remove the product"
                   onClick={() => handleRemoveCart(item.id)}
                 >
-                  <Trash2 />
+                  <Trash2 className={cn("size-5 drop-shadow-sm drop-shadow-red-300 stroke-red-500")}/>
                 </Button>
               </CardContent>
             </Card>
@@ -72,9 +76,12 @@ export default function Page() {
 
       <Card className="w-full max-w-md ml-auto mt-10">
         <CardContent className="flex items-center justify-between">
-
           <CardTitle>Total Amount:</CardTitle>
           <span className="text-lg font-bold">{totalPrice}</span>
+          <Button disabled={carts.length === 0} variant={carts.length===0? "ghost":"default"} onClick={()=> router.push('/checkout')} >
+            Checkout
+
+          </Button>
         </CardContent>
       </Card>
     </main>

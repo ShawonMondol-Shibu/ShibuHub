@@ -21,7 +21,10 @@ export default function NavbarUser() {
 
       <PopoverContent className="w-56 grid gap-2">
         {/* Profile info */}
-        <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+        <Link
+          href={"/profile"}
+          className="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
+        >
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
@@ -32,35 +35,37 @@ export default function NavbarUser() {
               shawonmondolshibu@gmail.com
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Cart */}
-        <Link href="/cart">
-          <Button
-            variant="ghost"
-            className="w-full flex items-center gap-2 justify-between"
-          >
+        <Button
+          variant="ghost"
+          asChild
+          className="w-full flex items-center gap-2 justify-between"
+        >
+          <Link href="/cart">
             <span className="flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />
               Cart
             </span>
             <span>{carts.length}</span>
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
         {/* Favourite */}
-        <Link href="/favourite">
           <Button
             variant="ghost"
+            asChild
             className="w-full flex items-center gap-2 justify-between"
           >
+        <Link href="/favourite">
             <span className="flex items-center gap-2">
               <Heart className="h-4 w-4" />
               Favourite
             </span>
             <span>{hearts.length}</span>
-          </Button>
         </Link>
+          </Button>
 
         {/* Logout */}
         <Button className="w-full">Logout</Button>
