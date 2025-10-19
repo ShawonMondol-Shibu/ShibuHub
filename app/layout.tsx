@@ -3,6 +3,7 @@ import { Lato } from "next/font/google";
 import "./globals.css";
 import Provider from "@/components/provider/Provider";
 import { Toaster } from "sonner";
+import AuthProvider from "@/components/context/AuthProvider";
 
 // Lato font config
 const lato = Lato({
@@ -24,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${lato.variable} antialiased`}>
+        <AuthProvider>
+
         <Provider>{children}</Provider>
+        </AuthProvider>
         <Toaster position="top-right" richColors />
       </body>
     </html>
