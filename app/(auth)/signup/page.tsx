@@ -55,8 +55,9 @@ export default function Page() {
           onSubmit={form.handleSubmit((data) => {
             handleSignup(data);
           })}
-          className="space-y-4 w-full max-w-md"
+          className="space-y-4 w-full max-w-md border shadow rounded-md p-5"
         >
+          <legend className="text-2xl font-semibold text-center">Register to ShibuHub</legend>
           <FormField
             control={form.control}
             name="fullName"

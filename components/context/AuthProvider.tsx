@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,6 +32,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [userData, setUserData] = useState<userType[]>([]);
+  const router = useRouter()
 
   useEffect(() => {
     const storedUsers = localStorage.getItem("userData");
@@ -49,9 +51,12 @@ export default function AuthProvider({
       toast.error("invalid credentials");
       return;
     }else{
-
-      setUserData([...userData, data]);
-      toast.success("You have signed up Successfully")
+      setTimeout(()=>{
+        setUserData([...userData, data]);
+        toast.success("You have signed up Successfully")
+        router.push('/login') 
+        
+      },1000)
     }
   };
 

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import Provider from "@/components/provider/Provider";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
 
 // Lato font config
 const lato = Lato({
@@ -28,21 +25,9 @@ export default function RootLayout({
   return (
     <main className={`${lato.variable} antialiased`}>
       <Provider>
-        <SidebarProvider
-          style={
-            {
-              "--sidebar-width": "calc(var(--spacing) * 72)",
-              "--header-height": "calc(var(--spacing) * 12)",
-            } as React.CSSProperties
-          }
-        >
-          <AppSidebar variant="inset" />
-          <SidebarInset>
-            <SiteHeader />
+        
 
             {children}
-          </SidebarInset>
-        </SidebarProvider>
       </Provider>
     </main>
   );

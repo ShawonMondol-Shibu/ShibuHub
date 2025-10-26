@@ -39,9 +39,12 @@ export default function Page() {
     const exsitEmail = userData.find((user) => user.email == data.email);
     const exsitPass = userData.find((user) => user.password == data.password);
     if (exsitEmail && exsitPass) {
-      toast.success("you logedin successfully");
-      router.push("/");
-      cookieStore.set("token", "shibu");
+      setTimeout(() => {
+        
+        toast.success("you logedin successfully");
+        router.push("/");
+        cookieStore.set("token", "shibu");
+      }, 2000);
     } else {
       toast.error("invalid creadentials");
     }
@@ -51,7 +54,7 @@ export default function Page() {
     <main className="min-h-screen flex items-center justify-center p-5">
       <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => handleLogin(data))} className="space-y-5 border p-5 w-md rounded-md">
-        <fieldset className="text-2xl font-semibold text-center mb-5">Login to ShibuHub</fieldset>
+        <legend className="text-2xl font-semibold text-center mb-5">Login to ShibuHub</legend>
         
           <FormField
             control={form.control}
