@@ -76,7 +76,7 @@ export default function Product({
             asChild
             className="mt-2 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500 border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
           >
-            <Link href={`/${id}`}>Buy Now</Link>
+            <Link href={`/products/${id}`}>Buy Now</Link>
           </Button>
         </CardFooter>
       </div>

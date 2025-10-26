@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface userType {
   fullName: string;
@@ -45,13 +46,13 @@ export default function AuthProvider({
   const handleSignup = (data: userType) => {
     const userExists = userData.find((user) => user.email === data.email);
     if (userExists) {
-      alert("invalid credentials");
+      toast.error("invalid credentials");
       return;
     }else{
 
       setUserData([...userData, data]);
+      toast.success("You have signed up Successfully")
     }
-    console.log(userData);
   };
 
   return (

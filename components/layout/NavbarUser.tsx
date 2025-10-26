@@ -6,10 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
+import { useRouter } from "next/navigation";
 
 export default function NavbarUser() {
   const { carts, hearts } = useContext(userContext);
-
+const router = useRouter()
   return (
     <Popover>
       <PopoverTrigger>
@@ -68,7 +69,7 @@ export default function NavbarUser() {
           </Button>
 
         {/* Logout */}
-        <Button className="w-full">Logout</Button>
+        <Button onClick={()=>{cookieStore.delete('token');router.push('/login') }} className="w-full">Logout</Button>
       </PopoverContent>
     </Popover>
   );

@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const formSchema = z
   .object({
@@ -142,12 +144,18 @@ export default function Page() {
             )}
           />
 
-          <button
-            type="submit"
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-          >
-            Sign Up
-          </button>
+          
+          <div className="flex items-center justify-between">
+            <Button variant={"default"} type="submit">
+              Submit
+            </Button>
+            <small>
+              I already have an account
+              <Button variant={`link`} size={"sm"} asChild>
+                <Link href={"/login"}>sign in</Link>
+              </Button>
+            </small>
+          </div>
         </form>
       </Form>
     </div>

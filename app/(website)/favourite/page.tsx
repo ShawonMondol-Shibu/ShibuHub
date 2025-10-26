@@ -25,7 +25,7 @@ export default function Page() {
     if (isInCart) {
       toast.error("Item is already in the cart");
     } else {
-      router.push(`/${id}`);
+      router.push(`/products/${id}`);
     }
   };
 
