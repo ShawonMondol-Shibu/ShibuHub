@@ -9,7 +9,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LockKeyhole, Mail } from "lucide-react";
 import Link from "next/link";
@@ -39,9 +43,8 @@ export default function Page() {
     const exsitPass = userData.find((user) => user.password == data.password);
     if (exsitEmail && exsitPass) {
       setTimeout(() => {
-        
         toast.success("you logedin successfully");
-        router.push("/");
+        router.push("/products");
         cookieStore.set("token", "shibu");
       }, 2000);
     } else {
@@ -52,9 +55,14 @@ export default function Page() {
   return (
     <main className="min-h-screen flex items-center justify-center p-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((data) => handleLogin(data))} className="space-y-5 border p-5 w-md rounded-md">
-        <legend className="text-2xl font-semibold text-center mb-5">Login to ShibuHub</legend>
-        
+        <form
+          onSubmit={form.handleSubmit((data) => handleLogin(data))}
+          className="space-y-5 border p-5 w-md rounded-md"
+        >
+          <legend className="text-2xl font-semibold text-center mb-5">
+            Login to ShibuHub
+          </legend>
+
           <FormField
             control={form.control}
             name="email"
@@ -62,17 +70,21 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <InputGroup>
-                <FormControl>
-                  <InputGroupInput type="email" placeholder="Enter Email" {...field} />
-                </FormControl>
-                <FormMessage />
-            <InputGroupAddon>
-            <Mail/>
-            </InputGroupAddon>
-            </InputGroup>
+                  <FormControl>
+                    <InputGroupInput
+                      type="email"
+                      placeholder="Enter Email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <InputGroupAddon>
+                    <Mail />
+                  </InputGroupAddon>
+                </InputGroup>
               </FormItem>
             )}
-            />
+          />
           <FormField
             control={form.control}
             name="password"
@@ -80,24 +92,25 @@ export default function Page() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                <FormControl>
-                  <InputGroupInput
-                    type="password"
-                    placeholder="Enter Password"
-                    {...field}
+                  <FormControl>
+                    <InputGroupInput
+                      type="password"
+                      placeholder="Enter Password"
+                      {...field}
                     />
-                </FormControl>
-                <InputGroupAddon>
-                <LockKeyhole/>
-                </InputGroupAddon>
-                    </InputGroup>
+                  </FormControl>
+                  <InputGroupAddon>
+                    <LockKeyhole />
+                  </InputGroupAddon>
+                </InputGroup>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-
-          <Button type="submit" className="w-full">login</Button>
+          <Button type="submit" className="w-full">
+            login
+          </Button>
           <span className="text-center ">
             <small>I dont have an account</small>
             <Button variant={`link`} size={"sm"} asChild>

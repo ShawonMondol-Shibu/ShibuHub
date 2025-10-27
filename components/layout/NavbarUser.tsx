@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function NavbarUser() {
   const { carts, hearts } = useContext(userContext);
@@ -69,7 +70,7 @@ const router = useRouter()
           </Button>
 
         {/* Logout */}
-        <Button onClick={()=>{cookieStore.delete('token');router.push('/login') }} className="w-full">Logout</Button>
+        <Button onClick={()=>{cookieStore.delete('token');router.push('/login'); toast.success("Logout Successfully.") }} className="w-full">Logout</Button>
       </PopoverContent>
     </Popover>
   );
