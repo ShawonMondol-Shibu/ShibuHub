@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { createContext, ReactNode } from "react";
 import { toast } from "sonner";
@@ -13,9 +14,11 @@ interface cartsType {
   id: number;
   image: string;
   title: string;
+description:string;
   quantity: number;
   price: number;
 }
+
 // Define the context value type
 export interface UserContextType {
   carts: cartsType[];
@@ -24,7 +27,7 @@ export interface UserContextType {
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
   setHearts: React.Dispatch<React.SetStateAction<heartsType[]>>;
   setCarts: React.Dispatch<React.SetStateAction<cartsType[]>>;
-  handleCart: (id: number, image: string, title: string, price: number) => void;
+  handleCart: (id: number, image: string, title: string,description:string, price: number) => void;
   handleQuantity: (id: number, quantity: number) => void;
   handleRemoveCart: (id: number) => void;
   handleHeart: (
@@ -49,6 +52,7 @@ const defaultUserContext: UserContextType = {
   handleRemoveCart: () => {},
   handleRemoveHeart: () => {},
 };
+
 // Create context with a default value
 
 export const userContext = createContext<UserContextType>(defaultUserContext);
@@ -58,6 +62,7 @@ interface ContextProviderProps {
 }
 
 export default function ContextProvider({ children }: ContextProviderProps) {
+  const router = useRouter()
   const [hearts, setHearts] = React.useState<heartsType[]>([]);
   const [carts, setCarts] = React.useState<cartsType[]>([]);
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
@@ -74,10 +79,12 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     localStorage.setItem('hearts', JSON.stringify(hearts))
   }, [carts,hearts]);
 
+  // Add to Cart Context
   const handleCart = (
     id: number,
     image: string,
     title: string,
+    description:string,
     price: number
   ) => {
     const existCart = carts.find((cart: { id: number }) => cart.id === id);
@@ -85,12 +92,14 @@ export default function ContextProvider({ children }: ContextProviderProps) {
       toast.error("Already added to cart");
       return;
     } else {
-      setCarts([...carts, { id, image, title, quantity: 1, price }]);
+      setCarts([...carts, { id, image, title, description, quantity: 1, price }]);
       toast.success("Added to cart");
+      router.push('/checkout')
     }
   };
 
   const handleQuantity = (id: number, quantity: number) => {
+    
     setCarts(
       carts.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
@@ -105,6 +114,8 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     toast.warning("Removed from cart");
   };
 
+
+  //Add to Heart Or Favourite Context
   const handleHeart = (
     id: number,
     image: string,

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface userType {
+export interface userType {
   fullName: string;
   email: string;
   phone?: string;

@@ -15,7 +15,7 @@ type carouselType = {
   id: number;
   image: string;
   title: string;
-  model: string;
+  category: string;
   description: string;
   price: number;
   discount: number;
@@ -32,7 +32,7 @@ export function Header({ headerData }: HeaderProps) {
       <Carousel className="container mx-auto relative z-10">
         <CarouselContent>
           {headerData?.slice(0, 5).map((item: carouselType) => {
-            const { id, image, title, price, model, description, discount } =
+            const { id, image, title, price, category, description, discount } =
               item;
             return (
               <CarouselItem key={id}>
@@ -60,7 +60,7 @@ export function Header({ headerData }: HeaderProps) {
                           variant="secondary"
                           className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
                         >
-                          {model}
+                          {category}
                         </Badge>
                         <CardTitle className="text-3xl lg:text-5xl line-clamp-2 xl:text-6xl font-bold text-indigo-950 leading-tight">
                           {title}

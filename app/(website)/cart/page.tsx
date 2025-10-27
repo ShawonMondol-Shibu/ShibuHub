@@ -11,8 +11,9 @@ import React, { useContext } from "react";
 
 interface cartItemType {
   id: number;
-  title: string;
   image: string;
+  title: string;
+  description:string;
   price: number;
   quantity: number;
 }
@@ -32,14 +33,18 @@ export default function Page() {
           carts.map((item: cartItemType) => (
             <Card key={item.id} className="w-full my-2">
               <CardContent className="flex items-center justify-between gap-5">
+
                 <Image
                   src={item.image || "/placeholder.svg"}
                   alt={item.title}
                   width={500}
                   height={500}
                   className="w-12 h-12"
-                />
+                  />
+                  <div>
                 <CardTitle className="flex-1">{item.title}</CardTitle>
+                <p className="line-clamp-1">{item.description}</p>
+                  </div>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
