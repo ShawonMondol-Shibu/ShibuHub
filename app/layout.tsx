@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "@/components/provider/Provider";
 import { Toaster } from "sonner";
 import AuthProvider from "@/components/context/AuthProvider";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 // Lato font config
 const lato = Lato({
@@ -23,6 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+
     <html lang="en" suppressHydrationWarning>
       <body className={`${lato.variable} antialiased`}>
         <AuthProvider>

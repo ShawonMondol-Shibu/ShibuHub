@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { CookiesProvider } from "react-cookie";
 import { toast } from "sonner";
 
 export interface userType {
@@ -61,9 +62,13 @@ export default function AuthProvider({
     }
   };
 
+
   return (
+    <CookiesProvider>
+
     <authContext.Provider value={{ userData, setUserData, handleSignup,}}>
       {children}
     </authContext.Provider>
+    </CookiesProvider>
   );
 }

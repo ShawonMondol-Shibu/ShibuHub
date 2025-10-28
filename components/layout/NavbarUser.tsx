@@ -8,10 +8,10 @@ import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 export default function NavbarUser() {
-  // const [, , removeCookie] = useCookies(["token"]);
+  const [, , removeCookie] = useCookies(["token"]);
   const { carts, hearts } = useContext(userContext);
   const router = useRouter();
   return (
@@ -74,7 +74,7 @@ export default function NavbarUser() {
         {/* Logout */}
         <Button
           onClick={() => {
-            cookieStore.delete("token");
+            removeCookie("token");
             router.push("/login");
             toast.success("Logout Successfully.");
           }}
