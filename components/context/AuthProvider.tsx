@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { CookiesProvider } from "react-cookie";
 import { toast } from "sonner";
 
 export interface userType {
@@ -22,7 +21,6 @@ const defaultAuthContext: authContextType = {
   userData: [],
   setUserData: () => {},
   handleSignup: () => {},
- 
 };
 
 const authContext = createContext<authContextType>(defaultAuthContext);
@@ -34,7 +32,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [userData, setUserData] = useState<userType[]>([]);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const storedUsers = localStorage.getItem("userData");
@@ -52,23 +50,18 @@ export default function AuthProvider({
     if (userExists) {
       toast.error("invalid credentials");
       return;
-    }else{
-      setTimeout(()=>{
+    } else {
+      setTimeout(() => {
         setUserData([...userData, data]);
-        toast.success("You have signed up Successfully")
-        router.push('/login') 
-        
-      },1000)
+        toast.success("You have signed up Successfully");
+        router.push("/login");
+      }, 1000);
     }
   };
 
-
   return (
-    <CookiesProvider>
-
-    <authContext.Provider value={{ userData, setUserData, handleSignup,}}>
+    <authContext.Provider value={{ userData, setUserData, handleSignup }}>
       {children}
     </authContext.Provider>
-    </CookiesProvider>
   );
 }

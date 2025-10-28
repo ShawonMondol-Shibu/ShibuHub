@@ -41,11 +41,11 @@ export default function Page() {
   });
 
   const handleLogin = (data: z.infer<typeof formSchema>) => {
-    const exsitUser = userData.find(
+    const existUser = userData.find(
       (user) => user.email == data.email && user.password == data.password
     );
 
-    if (exsitUser) {
+    if (existUser) {
       setCookie("token", "shibu");
       toast.success("you logedin successfully");
       router.push("/products");

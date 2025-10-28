@@ -1,4 +1,5 @@
 "use client";
+import { DashboardContext } from "@/components/context/AdminProvider";
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
 import {
@@ -14,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "sonner";
 import z from "zod";
@@ -27,6 +29,8 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+  const { userData } = DashboardContext();
+  const [, setCookie] = useCookies(["dashboard-token"]);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,15 +42,22 @@ export default function Page() {
   });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    const existUser = userData.find(
+      (user) => user.email == data.email && user.password == data.password
+    );
     console.log("Submitted data:", data);
-    toast.success("You are logged in successfully.");
-    router.push("/dashboard");
+    if (existUser) {
+      setCookie("dashboard-token", "shawon");
+      router.push("/dashboard");
+      toast.success("You are logged in successfully.");
+    } else {
+      toast.error("invalid credentials");
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
       <Form {...form}>
-        <Toaster richColors />
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           className="w-md border p-4 rounded-2xl space-y-8"

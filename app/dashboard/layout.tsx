@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import Provider from "@/components/provider/Provider";
+import AdminProvider from "@/components/context/AdminProvider";
 
 // Lato font config
 const lato = Lato({
@@ -8,8 +9,6 @@ const lato = Lato({
   weight: ["400", "700"],
   variable: "--font-lato",
 });
-
-
 
 export const metadata: Metadata = {
   title: `ShibuHub-Dashboard`,
@@ -21,14 +20,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
-    <main className={`${lato.variable} antialiased`}>
-      <Provider>
-        
-
-            {children}
-      </Provider>
-    </main>
+    <AdminProvider>
+      <main className={`${lato.variable} antialiased`}>
+        <Provider>{children}</Provider>
+      </main>
+    </AdminProvider>
   );
 }

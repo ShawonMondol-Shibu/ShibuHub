@@ -27,7 +27,7 @@ export default function RootLayout({
   
   return (
     // <html lang="en" suppressHydrationWarning>
-    
+
     <main className={`${lato.variable} antialiased`}>
       <Provider>
         <ContextProvider>

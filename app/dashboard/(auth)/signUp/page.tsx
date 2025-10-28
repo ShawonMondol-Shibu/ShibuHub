@@ -14,9 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardTitle } from "@/components/ui/card";
-import { toast, Toaster } from "sonner";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { DashboardContext } from "@/components/context/AdminProvider";
 
 const formSchema = z
   .object({
@@ -37,7 +36,7 @@ const formSchema = z
   });
 
 export default function Page() {
-  const router = useRouter();
+  const { handleSignup } = DashboardContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,18 +48,11 @@ export default function Page() {
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    toast.success("You are successfully signed up.");
-    router.push("/dashboard/signIn");
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <Form {...form}>
-        <Toaster richColors />
         <form
-          onSubmit={form.handleSubmit(handleSubmit)}
+          onSubmit={form.handleSubmit((data) => handleSignup(data))}
           className="space-y-8 w-lg p-5 border rounded-2xl shadow "
         >
           <CardTitle className="text-center">Sign Up in to ShibuHub</CardTitle>
