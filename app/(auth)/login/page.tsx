@@ -19,6 +19,7 @@ import { LockKeyhole, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+// import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -28,6 +29,7 @@ const formSchema = z.object({
   password: z.string().min(6, { message: "please enter password" }),
 });
 export default function Page() {
+  // const [, setCookie] = useCookies(["token"]);
   const { userData } = AuthContext();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,11 +44,9 @@ export default function Page() {
     const exsitEmail = userData.find((user) => user.email == data.email);
     const exsitPass = userData.find((user) => user.password == data.password);
     if (exsitEmail && exsitPass) {
-      setTimeout(() => {
-        toast.success("you logedin successfully");
-        router.push("/products");
+      router.push("/products");
         cookieStore.set("token", "shibu");
-      }, 2000);
+        toast.success("you logedin successfully");
     } else {
       toast.error("invalid creadentials");
     }

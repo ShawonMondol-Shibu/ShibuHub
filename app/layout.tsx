@@ -26,8 +26,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${lato.variable} antialiased`}>
         <AuthProvider>
-
-        <Provider>{children}</Provider>
+            <Provider>{children}</Provider>
         </AuthProvider>
         <Toaster position="top-right" richColors />
       </body>

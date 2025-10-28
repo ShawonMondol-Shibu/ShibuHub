@@ -8,10 +8,12 @@ import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+// import { useCookies } from "react-cookie";
 
 export default function NavbarUser() {
+  // const [, , removeCookie] = useCookies(["token"]);
   const { carts, hearts } = useContext(userContext);
-const router = useRouter()
+  const router = useRouter();
   return (
     <Popover>
       <PopoverTrigger>
@@ -55,22 +57,31 @@ const router = useRouter()
         </Button>
 
         {/* Favourite */}
-          <Button
-            variant="ghost"
-            asChild
-            className="w-full flex items-center gap-2 justify-between"
-          >
-        <Link href="/favourite">
+        <Button
+          variant="ghost"
+          asChild
+          className="w-full flex items-center gap-2 justify-between"
+        >
+          <Link href="/favourite">
             <span className="flex items-center gap-2">
               <Heart className="h-4 w-4" />
               Favourite
             </span>
             <span>{hearts.length}</span>
-        </Link>
-          </Button>
+          </Link>
+        </Button>
 
         {/* Logout */}
-        <Button onClick={()=>{cookieStore.delete('token');router.push('/login'); toast.success("Logout Successfully.") }} className="w-full">Logout</Button>
+        <Button
+          onClick={() => {
+            cookieStore.delete("token");
+            router.push("/login");
+            toast.success("Logout Successfully.");
+          }}
+          className="w-full"
+        >
+          Logout
+        </Button>
       </PopoverContent>
     </Popover>
   );

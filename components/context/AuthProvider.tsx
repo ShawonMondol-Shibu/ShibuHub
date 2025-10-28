@@ -21,6 +21,7 @@ const defaultAuthContext: authContextType = {
   userData: [],
   setUserData: () => {},
   handleSignup: () => {},
+ 
 };
 
 const authContext = createContext<authContextType>(defaultAuthContext);
@@ -61,7 +62,7 @@ export default function AuthProvider({
   };
 
   return (
-    <authContext.Provider value={{ userData, setUserData, handleSignup }}>
+    <authContext.Provider value={{ userData, setUserData, handleSignup,}}>
       {children}
     </authContext.Provider>
   );

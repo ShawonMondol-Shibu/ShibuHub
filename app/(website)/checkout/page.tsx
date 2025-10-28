@@ -12,7 +12,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { Mail, MapPin, Phone, ShoppingBag, User } from "lucide-react";
+import { Mail, MapPin, Phone,  User } from "lucide-react";
 import React, { useContext } from "react";
 import { toast } from "sonner";
 
