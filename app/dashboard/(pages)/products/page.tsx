@@ -4,7 +4,7 @@ import * as React from "react";
 
 export default function Page() {
   return (
-    <div className="grid grid-cols-4 gap-10 p-4">
+    <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-10 p-4">
       {Array.from({ length: 10 }).map((_, i) => (
         <Product
           key={i}
