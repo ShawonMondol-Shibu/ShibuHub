@@ -11,7 +11,6 @@ import { usePathname } from "next/navigation";
 import { FcShop } from "react-icons/fc";
 import { useState } from "react";
 import NavbarUser from "./NavbarUser";
-import Image from "next/image";
 
 export default function Navbar() {
   const pathName = usePathname();
@@ -36,7 +35,13 @@ export default function Navbar() {
               href="/"
               className="flex items-center space-x-2 group transition-transform duration-200 hover:scale-105"
             >
-          <Image src={'https://www.design.com/maker/social/6hjulgi3gv'} alt="logo image" width={100} height={100}/>
+              <FcShop
+                className="drop-shadow-lg transition-transform duration-200 group-hover:rotate-12"
+                size={40}
+              />
+              <span className="hidden sm:block font-bold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                ShibuHub
+              </span>
             </Link>
           </NavigationMenuItem>
 
