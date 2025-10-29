@@ -25,8 +25,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCookies } from "react-cookie";
 
 export function NavUser({
   user,
@@ -38,8 +36,6 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const [, , removeCookie] = useCookies(["dashboard-token"]);
-  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -101,8 +97,6 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                removeCookie("dashboard-token");
-                router.push("/dashboard/signIn");
                 toast.success("Logout Successfully");
               }}
             >
