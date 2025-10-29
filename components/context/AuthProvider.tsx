@@ -1,4 +1,5 @@
 "use client";
+import { audio } from "@/lib/alert";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -51,11 +52,10 @@ export default function AuthProvider({
       toast.error("invalid credentials");
       return;
     } else {
-      setTimeout(() => {
         setUserData([...userData, data]);
         toast.success("You have signed up Successfully");
         router.push("/login");
-      }, 1000);
+        audio.play()
     }
   };
 

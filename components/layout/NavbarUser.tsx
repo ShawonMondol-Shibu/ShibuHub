@@ -8,10 +8,9 @@ import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useCookies } from "react-cookie";
+import { audio } from "@/lib/alert";
 
 export default function NavbarUser() {
-  const [, , removeCookie] = useCookies(["token"]);
   const { carts, hearts } = useContext(userContext);
   const router = useRouter();
   return (
@@ -74,9 +73,9 @@ export default function NavbarUser() {
         {/* Logout */}
         <Button
           onClick={() => {
-            removeCookie("token");
             router.push("/login");
             toast.success("Logout Successfully.");
+            audio.play()
           }}
           className="w-full"
         >

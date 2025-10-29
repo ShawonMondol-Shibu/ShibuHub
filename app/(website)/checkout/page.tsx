@@ -12,6 +12,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import { audio } from "@/lib/alert";
 import { Mail, MapPin, Phone,  User } from "lucide-react";
 import React, { useContext } from "react";
 import { toast } from "sonner";
@@ -30,6 +31,7 @@ export default function Page() {
     } else {
       toast.success("Order Placed Successfully.");
       setCarts([]);
+      audio.play()
     }
   };
   const totalPrice = carts.reduce((total, item)=> (total + item.price * item.quantity),0)
