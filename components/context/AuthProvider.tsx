@@ -1,5 +1,4 @@
 "use client";
-import { audio } from "@/lib/alert";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -55,7 +54,6 @@ export default function AuthProvider({
         setUserData([...userData, data]);
         toast.success("You have signed up Successfully");
         router.push("/login");
-        audio.play()
     }
   };
 

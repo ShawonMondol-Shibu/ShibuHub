@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
-import { toast, Toaster } from "sonner";
+import { toast} from "sonner";
 import z from "zod";
 
 const formSchema = z.object({

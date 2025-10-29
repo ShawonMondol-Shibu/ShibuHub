@@ -1,5 +1,4 @@
 "use client";
-import { audio } from "@/lib/alert";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { createContext, ReactNode } from "react";
@@ -91,16 +90,14 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     const existCart = carts.find((cart: { id: number }) => cart.id === id);
     if (existCart) {
       toast.error("Already added to cart");
-      audio.play()
       return;
     } else {
       setCarts([...carts, { id, image, title, description, quantity: 1, price }]);
       toast.success("Added to cart");
       router.push('/checkout')
-      audio.play()
     }
   };
-  
+
   const handleQuantity = (id: number, quantity: number) => {
     
     setCarts(
@@ -109,17 +106,15 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     if (quantity === 0) {
       setCarts(carts.filter((item) => item.id !== id));
       toast.warning("Removed from cart");
-      audio.play()
     }
   };
-  
+
   const handleRemoveCart = (id: number) => {
     setCarts(carts.filter((item) => item.id !== id));
     toast.warning("Removed from cart");
-    audio.play()
   };
-  
-  
+
+
   //Add to Heart Or Favourite Context
   const handleHeart = (
     id: number,
@@ -130,19 +125,16 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     const existHeart = hearts.find((heart: { id: number }) => heart.id === id);
     if (existHeart) {
       toast.error("Already added to favourite");
-      audio.play()
       return;
     } else {
       setHearts([...hearts, { id, image, title, price }]);
       toast.success("Added to favourite");
-      audio.play()
     }
   };
-  
+
   const handleRemoveHeart = (id: number) => {
     setHearts(hearts.filter((heart: { id: number }) => heart.id !== id));
     toast.warning("Removed from favourite");
-    audio.play()
   };
 
 

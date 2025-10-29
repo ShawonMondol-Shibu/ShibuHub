@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card,  CardHeader, CardTitle } from '@/components/ui/card'
 import { Item, ItemContent, ItemMedia, ItemTitle } from '@/components/ui/item';
 import { CheckCircle2Icon } from 'lucide-react';
 import React from 'react'
