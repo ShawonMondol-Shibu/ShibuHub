@@ -14,21 +14,47 @@ import {
 } from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Loader2, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export default function Page() {
-  // const [category, setCategory] = useState("mobile");
   const [Pages, setPages] = useState(1);
+  const [search, setSearch] = useState("");
+
+  // Fetch all products
   const getData = async () => {
     const res = await fetch(`https://fakestoreapi.com/products`);
     return res.json();
   };
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data = [], isLoading, isError, error } = useQuery({
     queryKey: ["products"],
     queryFn: getData,
   });
 
+  // Filter products based on search input
+  const finalData = useMemo(() => {
+    if (!search) return data;
+    const searchTerm = search.toLowerCase().trim();
+    return data.filter(
+      (item: { title: string; category: string }) =>
+        item.title.toLowerCase().includes(searchTerm) ||
+        item.category.toLowerCase().includes(searchTerm)
+    );
+  }, [data, search]);
+
+  // Pagination logic
+  const productLimit = 8;
+  const paginatedItem = Math.ceil(finalData.length / productLimit);
+  const paginatedData = finalData.slice(
+    (Pages - 1) * productLimit,
+    Pages * productLimit
+  );
+
+  useEffect(() => {
+    setPages(1); // reset to page 1 when search changes
+  }, [search]);
+
+  // Loading state
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -39,6 +65,7 @@ export default function Page() {
       </div>
     );
 
+  // Error state
   if (isError)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -59,22 +86,10 @@ export default function Page() {
     );
 
   const categorys = ["tv", "audio", "laptop", "mobile", "gaming", "appliances"];
-  // const handleCategory = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   const categoryBlue = e.currentTarget.value;
-  //   setCategory(categoryBlue);
-  //   console.log(categoryBlue);
-  // };
-  //
-  //
-  console.log(data[0]);
 
-  const productLimit = 8;
-  const prevPage = Math.ceil(Pages - 1) * productLimit;
-  const nextPage = Pages * productLimit;
-  const paginatedItem = Math.ceil(data.length / productLimit);
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
+      {/* Header Section */}
       <section className="bg-white border-b border-indigo-100">
         <div className="container mx-auto px-6 py-12">
           <div className="text-center mb-8">
@@ -87,10 +102,14 @@ export default function Page() {
             </p>
           </div>
 
+          {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-8">
             <div className="relative group">
               <Input
-                placeholder="Search for your favorite products..."
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search products by title or category..."
                 className="h-14 pl-6 pr-16 text-lg border-2 border-indigo-200 focus:border-indigo-500 rounded-2xl shadow-lg transition-all duration-300 group-hover:shadow-xl"
               />
               <Button
@@ -103,6 +122,7 @@ export default function Page() {
             </div>
           </div>
 
+          {/* Category Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mr-4">
               <Filter className="h-4 w-4" />
@@ -111,16 +131,9 @@ export default function Page() {
             {categorys.map((cat) => (
               <Button
                 key={cat}
-                // variant={cat === category ? "default" : "outline"}
-                value={cat}
-                // onClick={handleCategory}
-                // className={`px-6 py-2 rounded-full font-medium transition-all duration-300
-                //  // {
-                //  //    cat === category
-                //  //      ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg scale-105"
-                //  //      : "border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300"
-                //  //  }
-                //   `}
+                variant="outline"
+                onClick={() => setSearch(cat)}
+                className="px-6 py-2 rounded-full border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300 font-medium transition-all duration-300"
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </Button>
@@ -129,8 +142,9 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Products Section */}
       <section className="container mx-auto px-6 py-16">
-        {!data || data.length === 0 ? (
+        {paginatedData.length === 0 ? (
           <div className="text-center py-20">
             <div className="max-w-md mx-auto">
               <div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -140,21 +154,19 @@ export default function Page() {
                 No Products Found
               </h2>
               <p className="text-gray-600 mb-8">
-                We couldn't find any products in the
-                {/*{category} */}
-                category. Try selecting a different category.
+                We couldn't find any matching products. Try a different keyword.
               </p>
               <Button
-                // onClick={() => setCategory("mobile")}
+                onClick={() => setSearch("")}
                 className="bg-indigo-600 hover:bg-indigo-700"
               >
-                Browse Mobile Products
+                Reset Search
               </Button>
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {data.slice(prevPage, nextPage).map((item: cardType) => {
+            {paginatedData.map((item: cardType) => {
               const { id, image, title, description, price } = item;
               return (
                 <div key={id} className="group">
@@ -172,7 +184,8 @@ export default function Page() {
         )}
       </section>
 
-      {data && data.length > 0 && (
+      {/* Pagination */}
+      {finalData.length > productLimit && (
         <section className="bg-white border-t border-indigo-100 py-8">
           <div className="container mx-auto px-6">
             <Pagination>
@@ -180,18 +193,19 @@ export default function Page() {
                 <PaginationItem>
                   <PaginationPrevious
                     href="#"
-                    onClick={()=>setPages(Math.max(Pages-1,1))}
+                    onClick={() => setPages(Math.max(Pages - 1, 1))}
                     className="rounded-xl border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                   />
                 </PaginationItem>
-                {Array.from({ length: paginatedItem }).map((item,i) => (
+
+                {Array.from({ length: paginatedItem }).map((_, i) => (
                   <PaginationItem key={i}>
                     <Button
-                      variant={Pages === i+1 ? "default" : "outline"}
-                      
-                      onClick={()=>setPages(i+1)}
+                      variant={Pages === i + 1 ? "default" : "outline"}
+                      onClick={() => setPages(i + 1)}
                       className={`w-12 h-12 rounded-xl ${
-                        Pages === i+1 ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                        Pages === i + 1
+                          ? "bg-indigo-600 hover:bg-indigo-700 text-white"
                           : "border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                       }`}
                     >
@@ -203,7 +217,7 @@ export default function Page() {
                 <PaginationItem>
                   <PaginationNext
                     href="#"
-                    onClick={()=>setPages(Math.min(Pages+1,paginatedItem))}
+                    onClick={() => setPages(Math.min(Pages + 1, paginatedItem))}
                     className="rounded-xl border-indigo-200 text-indigo-700 hover:bg-indigo-50"
                   />
                 </PaginationItem>
