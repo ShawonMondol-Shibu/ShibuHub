@@ -3,7 +3,6 @@ import { userContext } from "@/components/context/contextProvider";
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { audio } from "@/lib/alert";
 import { cn } from "@/lib/utils";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -25,7 +24,6 @@ export default function Page() {
     const isInCart = carts.find((item) => item.id === id);
     if (isInCart) {
       toast.error("Item is already in the cart");
-      audio.play()
     } else {
       router.push(`/products/${id}`);
     }

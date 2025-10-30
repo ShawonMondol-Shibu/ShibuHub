@@ -8,7 +8,6 @@ import { useContext } from "react";
 import { userContext } from "../context/contextProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { audio } from "@/lib/alert";
 
 export default function NavbarUser() {
   const { carts, hearts } = useContext(userContext);
@@ -75,7 +74,6 @@ export default function NavbarUser() {
           onClick={() => {
             router.push("/login");
             toast.success("Logout Successfully.");
-            audio.play()
           }}
           className="w-full"
         >
