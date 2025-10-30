@@ -25,7 +25,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { toast } from "sonner";
-import { audio } from "@/lib/alert";
 
 export function NavUser({
   user,
@@ -99,7 +98,6 @@ export function NavUser({
             <DropdownMenuItem
               onClick={() => {
                 toast.success("Logout Successfully");
-                audio.play()
               }}
             >
               <IconLogout />
