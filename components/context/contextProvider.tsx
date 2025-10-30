@@ -14,7 +14,7 @@ interface cartsType {
   id: number;
   image: string;
   title: string;
-description:string;
+  description: string;
   quantity: number;
   price: number;
 }
@@ -27,7 +27,13 @@ export interface UserContextType {
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
   setHearts: React.Dispatch<React.SetStateAction<heartsType[]>>;
   setCarts: React.Dispatch<React.SetStateAction<cartsType[]>>;
-  handleCart: (id: number, image: string, title: string,description:string, price: number) => void;
+  handleCart: (
+    id: number,
+    image: string,
+    title: string,
+    description: string,
+    price: number
+  ) => void;
   handleQuantity: (id: number, quantity: number) => void;
   handleRemoveCart: (id: number) => void;
   handleHeart: (
@@ -62,7 +68,7 @@ interface ContextProviderProps {
 }
 
 export default function ContextProvider({ children }: ContextProviderProps) {
-  const router = useRouter()
+  const router = useRouter();
   const [hearts, setHearts] = React.useState<heartsType[]>([]);
   const [carts, setCarts] = React.useState<cartsType[]>([]);
   const [totalPrice, setTotalPrice] = React.useState<number>(0);
@@ -76,15 +82,15 @@ export default function ContextProvider({ children }: ContextProviderProps) {
 
   React.useEffect(() => {
     localStorage.setItem("carts", JSON.stringify(carts));
-    localStorage.setItem('hearts', JSON.stringify(hearts))
-  }, [carts,hearts]);
+    localStorage.setItem("hearts", JSON.stringify(hearts));
+  }, [carts, hearts]);
 
   // Add to Cart Context
   const handleCart = (
     id: number,
     image: string,
     title: string,
-    description:string,
+    description: string,
     price: number
   ) => {
     const existCart = carts.find((cart: { id: number }) => cart.id === id);
@@ -92,14 +98,16 @@ export default function ContextProvider({ children }: ContextProviderProps) {
       toast.error("Already added to cart");
       return;
     } else {
-      setCarts([...carts, { id, image, title, description, quantity: 1, price }]);
+      setCarts([
+        ...carts,
+        { id, image, title, description, quantity: 1, price },
+      ]);
       toast.success("Added to cart");
-      router.push('/checkout')
+      router.push("/checkout");
     }
   };
 
   const handleQuantity = (id: number, quantity: number) => {
-    
     setCarts(
       carts.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
@@ -113,7 +121,6 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     setCarts(carts.filter((item) => item.id !== id));
     toast.warning("Removed from cart");
   };
-
 
   //Add to Heart Or Favourite Context
   const handleHeart = (
@@ -137,10 +144,12 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     toast.warning("Removed from favourite");
   };
 
-
   React.useEffect(() => {
-    const price = carts.reduce((total, item) => total + item.price * item.quantity, 0);
-    setTotalPrice(price.toFixed(2) as unknown as number );
+    const price = carts.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    setTotalPrice(price.toFixed(2) as unknown as number);
   }, [carts]);
 
   console.log(carts, ...carts);
