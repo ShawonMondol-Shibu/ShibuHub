@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -15,7 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { DashboardContext } from "@/components/context/AdminProvider";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
@@ -36,7 +39,8 @@ const formSchema = z
   });
 
 export default function Page() {
-  const { handleSignup } = DashboardContext();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,14 +52,31 @@ export default function Page() {
     },
   });
 
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const { error } = await authClient.signUp.email({
+      name: `${data.firstName} ${data.lastName}`,
+      email: data.email,
+      password: data.password,
+    });
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Account created! Please sign in.");
+      router.push("/dashboard/signIn");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => handleSignup(data))}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="space-y-8 w-lg p-5 border rounded-2xl shadow "
         >
-          <CardTitle className="text-center">Sign Up in to ShibuHub</CardTitle>
+          <CardTitle className="text-center">Sign Up to ShibuHub</CardTitle>
 
           <FormField
             control={form.control}
@@ -124,8 +145,8 @@ export default function Page() {
           />
 
           <div className="flex items-center justify-between">
-            <Button variant={"default"} type="submit">
-              Submit
+            <Button variant={"default"} type="submit" disabled={loading}>
+              {loading ? "Creating account..." : "Submit"}
             </Button>
             <small>
               I already have an account

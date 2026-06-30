@@ -16,6 +16,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import Product from "@/components/layout/Product";
+import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { useContext } from "react";
 import { userContext } from "@/components/context/contextProvider";
 import { cn } from "@/lib/utils";
@@ -59,13 +60,14 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
   });
 
   const { data: similarProducts } = useQuery({
-    queryKey: ["similar-products"],
+    queryKey: ["similar-products", data?.category],
     queryFn: fetchSimilarProducts,
+    enabled: !!data?.category,
   });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -73,22 +75,26 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-6">
-          <p className="text-destructive">
-            Failed to load product. Please try again.
-          </p>
-        </Card>
+      <div className="min-h-[60vh] flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <p className="text-destructive text-lg">Failed to load product.</p>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-6">
-          <p>Product not found.</p>
-        </Card>
+      <div className="min-h-[60vh] flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <p className="text-lg">Product not found.</p>
+          <Button variant="outline" onClick={() => window.history.back()}>
+            Go Back
+          </Button>
+        </div>
       </div>
     );
   }
@@ -107,10 +113,10 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
 
   const isHeart = hearts.find((heart: {id:number}) => heart.id === id);
   const isCart = carts.find((carts:{id:number})=>carts.id === id);
-  console.log(isCart);
 
   return (
     <main className="min-h-screen bg-background">
+      <DynamicBreadcrumb />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Product Image */}
@@ -167,7 +173,7 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
             </div>
 
             {/* Price */}
-            <div className="text-3xl font-bold text-indigo-500">
+            <div className="text-3xl font-bold text-primary">
               ${price.toFixed(2)}
             </div>
 
@@ -292,7 +298,10 @@ export default function ProductPage({ id: pageId }: ProductPageProps) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {similarProducts.slice(0, 4).map((similarProduct) => {
+                {similarProducts
+                  .filter((p: ProductType) => p.category === data?.category && p.id !== Number(pageId))
+                  .slice(0, 4)
+                  .map((similarProduct: ProductType) => {
                   const { id, image, title, description, price } =
                     similarProduct;
                   return (

@@ -2,18 +2,18 @@
 import { userContext } from "@/components/context/contextProvider";
 import { DynamicBreadcrumb } from "@/components/layout/DynamicBreadcrumb";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import { EmptyState } from "@/components/shared";
 
 interface cartItemType {
   id: number;
   image: string;
   title: string;
-  description:string;
+  description: string;
   price: number;
   quantity: number;
 }
@@ -21,74 +21,94 @@ interface cartItemType {
 export default function Page() {
   const { carts, totalPrice, handleQuantity, handleRemoveCart } =
     useContext(userContext);
-    const router = useRouter();
+  const router = useRouter();
 
   return (
-    <main className="container m-auto px-5">
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <DynamicBreadcrumb />
-      <section>
-        {carts.length === 0 ? (
-          <p>There are no carts</p>
-        ) : (
-          carts.map((item: cartItemType) => (
-            <Card key={item.id} className="w-full my-2">
-              <CardContent className="flex items-center justify-between gap-5">
 
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.title}
-                  width={500}
-                  height={500}
-                  className="w-12 h-12"
-                  />
-                  <div>
-                <CardTitle className="flex-1">{item.title}</CardTitle>
-                <p className="line-clamp-1">{item.description}</p>
+      {carts.length === 0 ? (
+        <EmptyState
+          icon={ShoppingBag}
+          title="Your cart is empty"
+          description="Add some products to get started."
+          action={{ label: "Browse Products", onClick: () => router.push("/products") }}
+        />
+      ) : (
+        <>
+          <div className="space-y-4 mt-8">
+            {carts.map((item: cartItemType) => (
+              <Card key={item.id} className="hover:shadow-md transition-shadow duration-200">
+                <CardContent className="flex items-center gap-4 p-4">
+                  <div className="w-16 h-16 relative flex-shrink-0 bg-muted rounded-lg overflow-hidden">
+                    <Image
+                      src={item.image || "/placeholder.svg"}
+                      alt={item.title}
+                      fill
+                      className="object-contain p-1"
+                    />
                   </div>
-                <div className="flex items-center gap-2">
+
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sm line-clamp-1">{item.title}</h3>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{item.description}</p>
+                    <p className="text-sm font-medium text-primary mt-1">${item.price.toFixed(2)}</p>
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleQuantity(item.id, item.quantity - 1)}
+                    >
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleQuantity(item.id, item.quantity + 1)}
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                  </div>
+
+                  <span className="font-semibold text-sm min-w-[60px] text-right">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
+
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleQuantity(item.id, item.quantity - 1)}
+                    className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => handleRemoveCart(item.id)}
                   >
-                    <Minus />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
-                  <span>{item.quantity}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleQuantity(item.id, item.quantity + 1)}
-                  >
-                    <Plus />
-                  </Button>
-                </div>
-                <span>
-                  <b>${(item.price * item.quantity).toFixed(2)}</b>
-                </span>
-                <Button
-                  variant={"ghost"}
-                  size="icon"
-                  title="remove the product"
-                  onClick={() => handleRemoveCart(item.id)}
-                >
-                  <Trash2 className={cn("size-5 drop-shadow-sm drop-shadow-red-300 stroke-red-500")}/>
-                </Button>
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </section>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-      <Card className="w-full max-w-md ml-auto mt-10">
-        <CardContent className="flex items-center justify-between">
-          <CardTitle>Total Amount:</CardTitle>
-          <span className="text-lg font-bold">{totalPrice}</span>
-          <Button disabled={carts.length === 0} variant={carts.length===0? "ghost":"default"} onClick={()=> router.push('/checkout')} >
-            Checkout
-
-          </Button>
-        </CardContent>
-      </Card>
+          <Card className="mt-8">
+            <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6">
+              <div className="text-center sm:text-left">
+                <p className="text-sm text-muted-foreground">Total ({carts.length} items)</p>
+                <p className="text-2xl font-bold">${totalPrice}</p>
+              </div>
+              <Button
+                size="lg"
+                onClick={() => router.push("/checkout")}
+                className="w-full sm:w-auto"
+              >
+                Proceed to Checkout
+              </Button>
+            </CardContent>
+          </Card>
+        </>
+      )}
     </main>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import { DashboardContext } from "@/components/context/AdminProvider";
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
 import {
@@ -15,10 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useCookies } from "react-cookie";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast} from "sonner";
+import { toast } from "sonner";
 import z from "zod";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
   email: z.email({ message: "Please enter a valid email address." }),
@@ -29,9 +29,8 @@ const formSchema = z.object({
 });
 
 export default function Page() {
-  const { userData } = DashboardContext();
-  const [, setCookie] = useCookies(["dashboard-token"]);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,17 +40,19 @@ export default function Page() {
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    const existUser = userData.find(
-      (user) => user.email == data.email && user.password == data.password
-    );
-    console.log("Submitted data:", data);
-    if (existUser) {
-      setCookie("dashboard-token", "shawon");
-      router.push("/dashboard");
-      toast.success("You are logged in successfully.");
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const { error } = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    });
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
     } else {
-      toast.error("invalid credentials");
+      toast.success("You are logged in successfully.");
+      router.push("/dashboard");
     }
   };
 
@@ -98,8 +99,8 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Sign In
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </Button>
           <span className="text-center ">
             <small>I dont have an account</small>

@@ -1,65 +1,55 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { createContext, useContext, ReactNode } from "react";
+import { useSession } from "@/lib/auth-client";
 
-export interface userType {
-  fullName: string;
+interface AuthUser {
+  id: string;
+  name: string;
   email: string;
-  phone?: string;
-  password: string;
-  address?: string;
+  image?: string | null;
+  role?: string;
 }
 
-interface authContextType {
-  userData: userType[];
-  setUserData: React.Dispatch<React.SetStateAction<userType[]>>;
-  handleSignup: (data: userType) => void;
+interface AuthContextType {
+  user: AuthUser | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
 }
 
-const defaultAuthContext: authContextType = {
-  userData: [],
-  setUserData: () => {},
-  handleSignup: () => {},
-};
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  isLoading: true,
+  isAuthenticated: false,
+});
 
-const authContext = createContext<authContextType>(defaultAuthContext);
-export const AuthContext = () => useContext(authContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-export default function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [userData, setUserData] = useState<userType[]>([]);
-  const router = useRouter();
+export const AuthContextHook = () => useContext(AuthContext);
 
-  useEffect(() => {
-    const storedUsers = localStorage.getItem("userData");
-    if (storedUsers) {
-      setUserData(JSON.parse(storedUsers));
-    }
-  }, []);
+export default function AuthProvider({ children }: { children: ReactNode }) {
+  const { data: session, isPending } = useSession();
 
-  useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(userData));
-  }, [userData]);
-
-  const handleSignup = (data: userType) => {
-    const userExists = userData.find((user) => user.email === data.email);
-    if (userExists) {
-      toast.error("invalid credentials");
-      return;
-    } else {
-        setUserData([...userData, data]);
-        toast.success("You have signed up Successfully");
-        router.push("/login");
-    }
-  };
+  const user = session?.user
+    ? {
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+        role: (session.user as Record<string, unknown>).role as string | undefined,
+      }
+    : null;
 
   return (
-    <authContext.Provider value={{ userData, setUserData, handleSignup }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading: isPending,
+        isAuthenticated: !!session?.user,
+      }}
+    >
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
 }

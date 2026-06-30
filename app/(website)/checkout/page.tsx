@@ -12,45 +12,73 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { Mail, MapPin, Phone,  User } from "lucide-react";
-import React, { useContext } from "react";
+import { ShoppingBag } from "lucide-react";
+import React, { useContext, useState } from "react";
 import { toast } from "sonner";
+import { Spinner } from "@/components/shared";
 
 export default function Page() {
   const { carts, setCarts } = useContext(userContext);
-  const userInfo = [
-    { icon: User, title: "Shawon Mondol Shibu" },
-    { icon: Mail, title: "ShawonMondolShibu@gmail.com" },
-    { icon: Phone, title: "01812014377" },
-    { icon: MapPin, title: "Netrakona, Mymenshingh, Bangladesh" },
-  ];
-  const handleBuy = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleBuy = async () => {
     if (carts.length === 0) {
-      toast.error("please add an items");
-    } else {
-      toast.success("Order Placed Successfully.");
-      setCarts([]);
+      toast.error("Please add items to your cart");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: carts.map((item) => ({
+            id: String(item.id),
+            name: item.title,
+            image: item.image,
+            price: item.price,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        setCarts([]);
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to create checkout session");
+      }
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
-  const totalPrice = carts.reduce((total, item)=> (total + item.price * item.quantity),0)
+
+  const totalPrice = carts.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
   return (
-    <main className="container m-auto p-5 flex md:flex-nowrap flex-wrap  items-start md:justify-between justify-center gap-10">
-      <section className="space-y-5">
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex md:flex-nowrap flex-wrap items-start md:justify-between justify-center gap-10">
+      <section className="space-y-4 flex-1">
         {carts.length === 0 ? (
-          <Item variant={"default"} className="flex items-center min-w-sm">
-            <ItemMedia></ItemMedia>
-            <ItemContent>
-              <ItemTitle className="text-xl">Theres no item to buy</ItemTitle>
-            </ItemContent>
-          </Item>
+          <div className="text-center py-16 space-y-4">
+            <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto" />
+            <h3 className="text-lg font-semibold">Your cart is empty</h3>
+            <p className="text-muted-foreground">Add some items to check out.</p>
+          </div>
         ) : (
           carts.map((item) => (
             <Item
               key={item.id}
-              variant={"muted"}
-              className="flex items-center min-w-sm shadow "
+              variant="muted"
+              className="flex items-center shadow"
             >
-              <ItemHeader>Item id</ItemHeader>
+              <ItemHeader>Item</ItemHeader>
               <ItemMedia>
                 <Avatar className="w-10 h-10">
                   <AvatarImage
@@ -60,7 +88,7 @@ export default function Page() {
                     height={200}
                     className="object-cover"
                   />
-                  <AvatarFallback>{item.title}</AvatarFallback>
+                  <AvatarFallback>{item.title.charAt(0)}</AvatarFallback>
                 </Avatar>
               </ItemMedia>
               <ItemContent>
@@ -68,10 +96,9 @@ export default function Page() {
                 <ItemDescription>{item.description}</ItemDescription>
               </ItemContent>
               <ItemActions className="space-x-2">
-                <span>{`Quantity: ${item.quantity}`}</span>
-                <span>
-                  <small>$</small>
-                  {`${item.price*item.quantity}`}
+                <span className="text-muted-foreground">Qty: {item.quantity}</span>
+                <span className="font-semibold">
+                  ${(item.price * item.quantity).toFixed(2)}
                 </span>
               </ItemActions>
             </Item>
@@ -79,23 +106,41 @@ export default function Page() {
         )}
       </section>
 
-      <Card className="w-full max-w-min ">
-        <CardContent className="space-y-10">
-          <div className="space-y-4">
-            {userInfo.map((item, i) => (
-              <span key={i} className="flex items-center gap-2">
-                <item.icon size={18} />
-                <p className="capitalize">{item.title}</p>
-              </span>
-            ))}
+      <Card className="w-full max-w-sm">
+        <CardContent className="space-y-6 pt-6">
+          <h3 className="text-lg font-semibold">Order Summary</h3>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Items</span>
+              <span>{carts.length}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>${totalPrice.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Shipping</span>
+              <span className="text-primary">Free</span>
+            </div>
           </div>
 
-          <span className="text-xl font-semibold">Total Price: <small>$</small>{totalPrice}</span>
+          <div className="border-t border-border pt-4">
+            <div className="flex justify-between text-lg font-semibold">
+              <span>Total</span>
+              <span>${totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
         </CardContent>
 
-        <CardFooter>
-          <Button onClick={() => handleBuy()} className="w-full">
-            Buy Now
+        <CardFooter className="pb-6">
+          <Button
+            onClick={handleBuy}
+            className="w-full"
+            disabled={loading || carts.length === 0}
+          >
+            {loading ? <Spinner size="sm" className="mr-2" /> : null}
+            {loading ? "Processing..." : "Pay with Stripe"}
           </Button>
         </CardFooter>
       </Card>

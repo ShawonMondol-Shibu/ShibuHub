@@ -152,8 +152,6 @@ export default function ContextProvider({ children }: ContextProviderProps) {
     setTotalPrice(price.toFixed(2) as unknown as number);
   }, [carts]);
 
-  console.log(carts, ...carts);
-  console.log(hearts);
   return (
     <userContext.Provider
       value={{
