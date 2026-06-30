@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
+import { Spinner } from "@/components/shared";
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -16,11 +18,29 @@ export function ContactForm() {
     phone: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        toast.success("Message sent! We'll get back to you soon.");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        toast.error("Failed to send message");
+      }
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (
@@ -33,16 +53,16 @@ export function ContactForm() {
   };
 
   return (
-    <Card className="border-indigo-200 shadow-lg">
-      <CardHeader className="bg-indigo-50">
-        <CardTitle className="text-2xl text-indigo-900">
+    <Card className="border-border shadow-lg">
+      <CardHeader className="bg-muted">
+        <CardTitle className="text-2xl text-foreground">
           Send us a Message
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-indigo-800 font-medium">
+            <Label htmlFor="name" className="font-medium">
               Full Name
             </Label>
             <Input
@@ -51,7 +71,6 @@ export function ContactForm() {
               type="text"
               value={formData.name}
               onChange={handleChange}
-              className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500"
               placeholder="Enter your full name"
               required
             />
@@ -59,7 +78,7 @@ export function ContactForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-indigo-800 font-medium">
+              <Label htmlFor="email" className="font-medium">
                 Email Address
               </Label>
               <Input
@@ -68,14 +87,13 @@ export function ContactForm() {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="your@email.com"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-indigo-800 font-medium">
+              <Label htmlFor="phone" className="font-medium">
                 Phone Number
               </Label>
               <Input
@@ -84,14 +102,13 @@ export function ContactForm() {
                 type="tel"
                 value={formData.phone}
                 onChange={handleChange}
-                className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="+1 (555) 123-4567"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-indigo-800 font-medium">
+            <Label htmlFor="message" className="font-medium">
               Message
             </Label>
             <Textarea
@@ -99,7 +116,7 @@ export function ContactForm() {
               name="message"
               value={formData.message}
               onChange={handleChange}
-              className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500 min-h-[120px]"
+              className="min-h-[120px]"
               placeholder="Tell us how we can help you..."
               required
             />
@@ -107,9 +124,11 @@ export function ContactForm() {
 
           <Button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 text-lg font-medium"
+            className="w-full"
+            disabled={loading}
           >
-            Send Message
+            {loading && <Spinner size="sm" className="mr-2" />}
+            {loading ? "Sending..." : "Send Message"}
           </Button>
         </form>
       </CardContent>

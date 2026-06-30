@@ -1,31 +1,44 @@
+"use client";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Item, ItemContent, ItemTitle, ItemMedia } from "@/components/ui/item";
 import { XCircle } from "lucide-react";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CanceledOrders() {
-  const data = [1, 2, 3];
+  const { data: orders = [] } = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const res = await fetch("/api/orders");
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const canceledOrders = orders.filter(
+    (order: { status: string }) => order.status === "cancelled"
+  );
+
   return (
     <main className="space-y-5 p-5 border rounded-lg">
-      <Card className="bg-rose-500 text-white">
+      <Card className="bg-destructive text-destructive-foreground">
         <CardHeader>
-          <CardTitle >Canceled Orders</CardTitle>
+          <CardTitle>Canceled Orders</CardTitle>
         </CardHeader>
       </Card>
 
       <div className="space-y-2">
-        {data.length === 0 ? (
+        {canceledOrders.length === 0 ? (
           <Item variant={"outline"}>
             <ItemContent>
               <ItemTitle>Empty Canceled Orders</ItemTitle>
             </ItemContent>
           </Item>
         ) : (
-          data.map((item) => (
+          canceledOrders.map((order: { id: string }) => (
             <Item
-              key={item}
+              key={order.id}
               variant={"outline"}
-              className="bg-rose-50 border-rose-200"
+              className="bg-muted border-border"
             >
               <ItemMedia>
                 <XCircle
@@ -36,7 +49,9 @@ export default function CanceledOrders() {
                 />
               </ItemMedia>
               <ItemContent>
-                <ItemTitle>Order #{item} is Canceled</ItemTitle>
+                <ItemTitle>
+                  Order #{order.id.slice(0, 8)} is Canceled
+                </ItemTitle>
               </ItemContent>
             </Item>
           ))

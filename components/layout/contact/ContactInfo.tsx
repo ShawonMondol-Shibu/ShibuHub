@@ -7,8 +7,8 @@ export function ContactInfo() {
     {
       icon: <Mail className="w-6 h-6" />,
       label: "Email",
-      value: "support@digitaldevices.com",
-      link: "mailto:support@digitaldevices.com",
+      value: "support@shibuhub.com",
+      link: "mailto:support@shibuhub.com",
     },
     {
       icon: <Phone className="w-6 h-6" />,
@@ -53,10 +53,9 @@ export function ContactInfo() {
 
   return (
     <div className="space-y-6">
-      {/* Contact Information Card */}
-      <Card className="border-indigo-200 shadow-lg">
-        <CardHeader className="bg-indigo-50">
-          <CardTitle className="text-2xl text-indigo-900">
+      <Card className="border-border shadow-lg">
+        <CardHeader className="bg-muted">
+          <CardTitle className="text-2xl text-foreground">
             Get in Touch
           </CardTitle>
         </CardHeader>
@@ -64,22 +63,22 @@ export function ContactInfo() {
           <div className="space-y-6">
             {contactMethods.map((method, index) => (
               <div key={index} className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                  <div className="text-indigo-600">{method.icon}</div>
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <div className="text-primary">{method.icon}</div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-indigo-900 mb-1">
+                  <h3 className="font-semibold text-foreground mb-1">
                     {method.label}
                   </h3>
                   {method.link !== "#" ? (
                     <a
                       href={method.link}
-                      className="text-indigo-600 hover:text-indigo-800 transition-colors"
+                      className="text-primary hover:text-primary/80 transition-colors"
                     >
                       {method.value}
                     </a>
                   ) : (
-                    <p className="text-indigo-700">{method.value}</p>
+                    <p className="text-muted-foreground">{method.value}</p>
                   )}
                 </div>
               </div>
@@ -88,10 +87,9 @@ export function ContactInfo() {
         </CardContent>
       </Card>
 
-      {/* Social Media Card */}
-      <Card className="border-indigo-200 shadow-lg">
-        <CardHeader className="bg-indigo-50">
-          <CardTitle className="text-2xl text-indigo-900">Follow Us</CardTitle>
+      <Card className="border-border shadow-lg">
+        <CardHeader className="bg-muted">
+          <CardTitle className="text-2xl text-foreground">Follow Us</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
@@ -101,14 +99,14 @@ export function ContactInfo() {
                 href={social.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-4 p-3 rounded-lg border border-indigo-100 hover:bg-indigo-50 transition-colors group"
+                className="flex items-center space-x-4 p-3 rounded-lg border border-border hover:bg-accent transition-colors group"
               >
                 <div
                   className={`${social.color} group-hover:scale-110 transition-transform`}
                 >
                   {social.icon}
                 </div>
-                <span className="font-medium text-indigo-900 group-hover:text-indigo-700">
+                <span className="font-medium text-foreground group-hover:text-primary transition-colors">
                   {social.label}
                 </span>
               </a>

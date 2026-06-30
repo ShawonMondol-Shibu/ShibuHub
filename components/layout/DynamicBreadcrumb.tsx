@@ -25,7 +25,7 @@ export function DynamicBreadcrumb() {
           <>
             <BreadcrumbLink
               asChild
-              className="capitalize text-lg font-semibold hover:text-indigo-500 transition-colors"
+              className="capitalize text-lg font-semibold hover:text-primary transition-colors"
             >
               <Link href={href}>{segment}</Link>
             </BreadcrumbLink>
@@ -41,11 +41,8 @@ export function DynamicBreadcrumb() {
   });
 
   return (
-    <div className="relative">
-      <i className="w-full h-5 bg-indigo-500 blur-xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-200 ease-out"></i>
-      <Breadcrumb className="py-5 px-5 bg-transparent relative z-10">
-        <BreadcrumbList>{crumbs}</BreadcrumbList>
-      </Breadcrumb>
-    </div>
+    <Breadcrumb className="py-5 px-5">
+      <BreadcrumbList>{crumbs}</BreadcrumbList>
+    </Breadcrumb>
   );
 }

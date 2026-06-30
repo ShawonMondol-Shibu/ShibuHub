@@ -1,35 +1,51 @@
-import { Button } from "@/components/ui/button";
-import { Card,  CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
 import { Timer } from "lucide-react";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function PendingOrders() {
-  const data = [1, 2, 3];
+  const { data: orders = [] } = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const res = await fetch("/api/orders");
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  const pendingOrders = orders.filter(
+    (order: { status: string }) =>
+      order.status === "pending" || order.status === "processing"
+  );
+
   return (
-    <main className="space-y-5 border p-5 rounded-lg">
-      <Card className="bg-yellow-500 text-white">
+    <main className="space-y-4 border p-5 rounded-lg">
+      <Card className="bg-primary text-primary-foreground">
         <CardHeader>
-          <CardTitle >Pendign Orders</CardTitle>
+          <CardTitle>Pending Orders</CardTitle>
         </CardHeader>
       </Card>
 
       <div className="space-y-2">
-        {data.length === 0 ? (
+        {pendingOrders.length === 0 ? (
           <Item variant={"outline"}>
             <ItemContent>
               <ItemTitle>Empty Pending Orders</ItemTitle>
             </ItemContent>
           </Item>
         ) : (
-          data.map((item) => (
-            <Item key={item} variant={"outline"} className="bg-orange-50 border-orange-200">
+          pendingOrders.map((order: { id: string }) => (
+            <Item
+              key={order.id}
+              variant={"outline"}
+              className="bg-muted border-border"
+            >
               <ItemMedia>
                 <Timer
                   size={18}
@@ -38,13 +54,10 @@ export default function PendingOrders() {
                 />
               </ItemMedia>
               <ItemContent>
-                <ItemTitle>Order #{item} is pending</ItemTitle>
+                <ItemTitle>
+                  Order #{order.id.slice(0, 8)} is pending
+                </ItemTitle>
               </ItemContent>
-              <ItemActions>
-                <Button variant={"outline"} size={"sm"}>
-                  Cancel
-                </Button>
-              </ItemActions>
             </Item>
           ))
         )}
