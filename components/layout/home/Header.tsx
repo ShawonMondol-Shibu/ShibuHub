@@ -1,115 +1,90 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-
-type carouselType = {
-  id: number;
-  image: string;
-  title: string;
-  category: string;
-  description: string;
-  price: number;
-  discount: number;
-};
+import { ArrowRight, Smartphone, Shirt, Gem } from "lucide-react";
 
 type HeaderProps = {
-  headerData: carouselType[];
+  headerData: Array<{
+    id: number;
+    image: string;
+    title: string;
+    category: string;
+    description: string;
+    price: number;
+    discount: number;
+  }>;
 };
 
+const categories = [
+  { name: "Electronics", icon: Smartphone, href: "/products" },
+  { name: "Clothing", icon: Shirt, href: "/products" },
+  { name: "Jewelry", icon: Gem, href: "/products" },
+];
+
 export function Header({ headerData }: HeaderProps) {
+  const featured = headerData?.[0];
+
   return (
-    <header className="h-[calc(100dvh-64px)] relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
-      <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
-      <Carousel className="container mx-auto relative z-10">
-        <CarouselContent>
-          {headerData?.slice(0, 5).map((item: carouselType) => {
-            const { id, image, title, price, category, description, discount } =
-              item;
-            return (
-              <CarouselItem key={id}>
-                <Card className="border-none shadow-none bg-transparent">
-                  <CardContent className="grid lg:grid-cols-2 grid-cols-1 items-center gap-8 lg:gap-16 py-12 lg:py-20 px-6">
-                    <div className="relative group order-2 lg:order-1">
-                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-3xl blur-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
-                      <div className="relative w-fit m-auto bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-indigo-100">
-                        <Image
-                          src={
-                            image ||
-                            "/placeholder.svg?height=400&width=400&query=modern+electronic+device"
-                          }
-                          width={400}
-                          height={400}
-                          alt={title}
-                          className=" h-auto object-contain drop-shadow-2xl"
-                        />
-                      </div>
-                    </div>
+    <header className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 text-center lg:text-left">
+            <Badge variant="secondary" className="bg-primary/10 text-primary">
+              Premium Electronics
+            </Badge>
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight">
+              Premium Electronics for Your Digital Life
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0">
+              Discover curated tech products that blend innovation with quality. From smartphones to smart home devices.
+            </p>
+            <div className="flex gap-4 justify-center lg:justify-start">
+              <Button size="lg" asChild className="rounded-full">
+                <Link href="/products">
+                  Browse Products
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
 
-                    <div className="space-y-6 order-1 lg:order-2 text-center lg:text-left">
-                      <div className="space-y-3">
-                        <Badge
-                          variant="secondary"
-                          className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-                        >
-                          {category}
-                        </Badge>
-                        <CardTitle className="text-3xl lg:text-5xl line-clamp-2 xl:text-6xl font-bold text-indigo-950 leading-tight">
-                          {title}
-                        </CardTitle>
-                      </div>
-
-                      <p className="text-lg text-gray-600 line-clamp-3 leading-relaxed max-w-xl">
-                        {description}
-                      </p>
-
-                      <div className="space-y-4">
-                        {discount > 0 && (
-                          <div className="flex items-center gap-3 justify-center lg:justify-start">
-                            <span className="text-sm text-gray-500">Was:</span>
-                            <del className="text-xl font-semibold text-red-500">
-                              ${discount}
-                            </del>
-                            <Badge variant="destructive" className="text-xs">
-                              SAVE ${discount - price}
-                            </Badge>
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-6 justify-center lg:justify-start flex-wrap">
-                          <span className="text-4xl font-bold text-indigo-600">
-                            ${price}
-                          </span>
-                          <Button
-                            size="lg"
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                            asChild
-                          >
-                            <Link href={`/products/${id}`}>Get It Now</Link>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            );
-          })}
-        </CarouselContent>
-
-        <div className="flex justify-center  gap-4">
-          <CarouselPrevious className="relative translate-y-0 left-0 bg-white/80 backdrop-blur-sm border-indigo-200 hover:bg-indigo-50" />
-          <CarouselNext className="relative translate-y-0 right-0 bg-white/80 backdrop-blur-sm border-indigo-200 hover:bg-indigo-50" />
+          {featured && (
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/10 rounded-3xl blur-3xl opacity-50" />
+              <div className="relative bg-card/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-border">
+                <Badge variant="secondary" className="absolute top-4 left-4 bg-primary/10 text-primary">
+                  {featured.category}
+                </Badge>
+                <Image
+                  src={featured.image || "/placeholder.svg?height=400&width=400"}
+                  width={400}
+                  height={400}
+                  alt={featured.title}
+                  className="w-full h-auto object-contain max-h-80"
+                />
+                <div className="mt-4 text-center">
+                  <h3 className="font-semibold text-foreground line-clamp-1">{featured.title}</h3>
+                  <p className="text-2xl font-bold text-primary mt-1">${featured.price}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </Carousel>
+
+        <div className="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
+          {categories.map((cat) => (
+            <Link
+              key={cat.name}
+              href={cat.href}
+              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border hover:shadow-md hover:border-primary/20 transition-all duration-200"
+            >
+              <cat.icon className="h-8 w-8 text-primary" />
+              <span className="text-sm font-medium text-foreground">{cat.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </header>
   );
 }

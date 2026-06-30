@@ -1,5 +1,4 @@
 "use client";
-import { AuthContext } from "@/components/context/AuthProvider";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,20 +17,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LockKeyhole, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { useCookies } from "react-cookie";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
   email: z.email({ message: "please enter your email" }).min(2),
   password: z.string().min(6, { message: "please enter password" }),
 });
+
 export default function Page() {
-  const [, setCookie] = useCookies(["token"]);
-  const { userData } = AuthContext();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,28 +39,30 @@ export default function Page() {
     },
   });
 
-  const handleLogin = (data: z.infer<typeof formSchema>) => {
-    const existUser = userData.find(
-      (user) => user.email == data.email && user.password == data.password
-    );
+  const handleLogin = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const { error } = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    });
+    setLoading(false);
 
-    if (existUser) {
-      setCookie("token", "shibu");
-      toast.success("you logedin successfully");
-      router.push("/products");
+    if (error) {
+      toast.error(error.message);
     } else {
-      toast.error("invalid creadentials");
+      toast.success("Signed in successfully!");
+      router.push("/products");
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-5">
+    <main className="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-primary/5 via-background to-primary/10">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => handleLogin(data))}
-          className="space-y-5 border p-5 w-md rounded-md"
+          onSubmit={form.handleSubmit(handleLogin)}
+          className="space-y-5 border border-border p-8 w-md rounded-xl bg-card shadow-lg"
         >
-          <legend className="text-2xl font-semibold text-center mb-5">
+          <legend className="text-2xl font-semibold text-center mb-6 text-foreground">
             Login to ShibuHub
           </legend>
 
@@ -110,8 +111,8 @@ export default function Page() {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            login
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing in..." : "Login"}
           </Button>
           <span className="text-center ">
             <small>I dont have an account</small>

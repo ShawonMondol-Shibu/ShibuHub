@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import { useContext } from "react";
@@ -31,55 +25,48 @@ export default function Product({
   price,
 }: cardType) {
   const { hearts, handleHeart } = useContext(userContext);
-  const isHeart = hearts.find((heart: {id:number}) => heart.id === id);
+  const isHeart = hearts.find((heart: { id: number }) => heart.id === id);
 
   return (
-    <Card className=" w-full max-w-md hover:shadow-2xl shadow-indigo-300 hover:scale-105 ease-in transition-all duration-200 m-auto group relative">
-      <i className="w-10/12 h-20 group-hover:bg-indigo-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transition-colors duration-200 ease-out"></i>
-      <div className="z-10 backdrop-blur-3xl">
-        <CardHeader className="relative flex flex-col items-center justify-center h-80">
-          <Button
-            variant={"secondary"}
-            size={"icon"}
-            onClick={() => handleHeart(id, image, title, price)}
-            className="size-9 rounded-full absolute top-0 right-5 z-50"
-          >
-            <Heart
-              className={cn(
-                "size-5",
-                isHeart
-                  ? "drop-shadow-sm drop-shadow-red-500 fill-red-500 stroke-red-500"
-                  : "stroke-2",
-              )}
-            />
-          </Button>
-          <div className="w-48">
+    <Card className="w-full max-w-md hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 m-auto group overflow-hidden border-border">
+      <div className="relative overflow-hidden">
+        <Button
+          variant="secondary"
+          size="icon"
+          onClick={() => handleHeart(id, image, title, price)}
+          className="size-8 rounded-full absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm hover:bg-background transition-all duration-200 hover:scale-110"
+        >
+          <Heart
+            className={cn(
+              "size-4 transition-all duration-200",
+              isHeart
+                ? "fill-red-500 stroke-red-500"
+                : "stroke-2 group-hover:scale-110"
+            )}
+          />
+        </Button>
+        <CardHeader className="flex flex-col items-center justify-center h-56 bg-muted/50 rounded-t-xl overflow-hidden p-4">
+          <div className="w-32 h-32 relative group-hover:scale-105 transition-transform duration-500 ease-out">
             <Image
               width={300}
               height={300}
               src={image || "/images/image.png"}
               alt={title}
-              className="m-auto object-cover mix-blend-lighten drop-shadow-xl drop-shadow-zinc-300"
+              className="m-auto object-contain"
             />
           </div>
         </CardHeader>
-        <CardContent className="space-y-1 z-50">
-          <CardTitle id="title" className="line-clamp-1">
-            {title}
-          </CardTitle>
-          <p className="text-base font-semibold">$ {price} </p>
-          <p className="text-sm line-clamp-2 text-neutral-500">{description}</p>
-        </CardContent>
-        <CardFooter>
-          <Button
-            variant={"outline"}
-            asChild
-            className="mt-2 group-hover:bg-indigo-500 bg-indigo-500 hover:bg-indigo-500 border-none group-hover:shadow-xl group-hover:shadow-indigo-500 hover:text-white text-white"
-          >
-            <Link href={`/products/${id}`}>Buy Now</Link>
-          </Button>
-        </CardFooter>
       </div>
+      <CardContent className="pt-4 pb-2 px-4">
+        <h3 className="font-semibold text-sm line-clamp-1 text-foreground">{title}</h3>
+        <p className="text-lg font-bold text-primary mt-1">${price}</p>
+        <p className="text-xs line-clamp-2 text-muted-foreground mt-1">{description}</p>
+      </CardContent>
+      <CardFooter className="pb-4 px-4">
+        <Button variant="default" asChild className="w-full text-sm">
+          <Link href={`/products/${id}`}>View Details</Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

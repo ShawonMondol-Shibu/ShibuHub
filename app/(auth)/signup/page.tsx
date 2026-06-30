@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { AuthContext } from "@/components/context/AuthProvider";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -15,6 +14,9 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
@@ -33,7 +35,8 @@ const formSchema = z
   });
 
 export default function Page() {
-  const { handleSignup } = AuthContext();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,17 +50,34 @@ export default function Page() {
     },
   });
 
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const { error } = await authClient.signUp.email({
+      name: data.fullName,
+      email: data.email,
+      password: data.password,
+    });
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Account created! Please sign in.");
+      router.push("/login");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary/5 via-background to-primary/10">
       <Form {...form}>
         <form
           autoComplete="on"
-          onSubmit={form.handleSubmit((data) => {
-            handleSignup(data);
-          })}
-          className="space-y-4 w-full max-w-md border shadow rounded-md p-5"
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-4 w-full max-w-md border border-border shadow-lg rounded-xl p-8 bg-card"
         >
-          <legend className="text-2xl font-semibold text-center">Register to ShibuHub</legend>
+          <legend className="text-2xl font-semibold text-center text-foreground">
+            Register to ShibuHub
+          </legend>
           <FormField
             control={form.control}
             name="fullName"
@@ -145,10 +165,9 @@ export default function Page() {
             )}
           />
 
-          
           <div className="flex items-center justify-between">
-            <Button variant={"default"} type="submit">
-              Submit
+            <Button variant={"default"} type="submit" disabled={loading}>
+              {loading ? "Creating account..." : "Submit"}
             </Button>
             <small>
               I already have an account

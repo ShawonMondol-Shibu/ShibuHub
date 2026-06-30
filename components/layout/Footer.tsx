@@ -21,24 +21,24 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
 const contactInfo = [
-  { icon: Mail, text: "support@digitaldevices.com" },
+  { icon: Mail, text: "support@shibuhub.com" },
   { icon: Phone, text: "+1 (555) 123-4567" },
   { icon: MapPin, text: "123 Tech Street, Digital City, DC 12345" },
 ];
 
 const navigationLinks = [
-  { href: "#", text: "Shop" },
-  { href: "#", text: "About Us" },
-  { href: "#", text: "Customer Service" },
-  { href: "#", text: "Privacy Policy" },
-  { href: "#", text: "Terms of Service" },
+  { href: "/products", text: "Shop" },
+  { href: "/about", text: "About Us" },
+  { href: "/contact", text: "Customer Service" },
+  { href: "/about#privacy", text: "Privacy Policy" },
+  { href: "/about#terms", text: "Terms of Service" },
 ];
 
 const socialLinks = [
-  { icon: Facebook, href: "#" },
-  { icon: Twitter, href: "#" },
-  { icon: Instagram, href: "#" },
-  { icon: Linkedin, href: "#" },
+  { icon: Facebook, href: "https://facebook.com" },
+  { icon: Twitter, href: "https://twitter.com" },
+  { icon: Instagram, href: "https://instagram.com" },
+  { icon: Linkedin, href: "https://linkedin.com" },
 ];
 
 const paymentMethods = {
@@ -74,12 +74,12 @@ const PaymentMethodGroup = ({
   methods: Array<{ src?: string; icon?: any; alt: string; color?: string }>;
 }) => (
   <div className="flex items-center gap-2 flex-wrap">
-    <span className="text-sm text-primary-foreground/80">{label}:</span>
+    <span className="text-xs text-muted-foreground">{label}:</span>
     {methods.map((method) =>
       method.icon ? (
         <method.icon
           key={method.alt}
-          className="h-8 w-12 bg-white rounded p-1"
+          className="h-7 w-10 bg-white rounded p-1"
           style={{ color: method.color }}
           title={method.alt}
         />
@@ -90,7 +90,7 @@ const PaymentMethodGroup = ({
           alt={method.alt}
           width={500}
           height={500}
-          className="h-8 w-12 object-contain bg-white rounded"
+          className="h-7 w-10 object-contain bg-white rounded"
         />
       ),
     )}
@@ -99,37 +99,32 @@ const PaymentMethodGroup = ({
 
 export function Footer() {
   return (
-    <footer className=" bg-indigo-950 text-primary-foreground">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Company Information */}
+    <footer className="bg-muted/30 border-t border-border">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary-foreground">
-              Digital Device Services
-            </h3>
-            <div className="space-y-3">
+            <h3 className="text-lg font-bold text-foreground">ShibuHub</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Your trusted partner for premium digital electronics and exceptional service.
+            </p>
+            <div className="space-y-2">
               {contactInfo.map((contact, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <contact.icon className="h-5 w-5 text-primary-foreground" />
-                  <span className="text-primary-foreground">
-                    {contact.text}
-                  </span>
+                <div key={index} className="flex items-center gap-2">
+                  <contact.icon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">{contact.text}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Navigation Links */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary-foreground">
-              Quick Links
-            </h3>
+            <h3 className="text-lg font-bold text-foreground">Quick Links</h3>
             <div className="space-y-2">
               {navigationLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
-                  className="block text-primary-foreground hover:text-accent transition-colors"
+                  className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {link.text}
                 </a>
@@ -137,72 +132,51 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Social Media & Newsletter */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary-foreground">
-              Stay Connected
-            </h3>
-
-            {/* Social Media Icons */}
-            <div className="flex gap-4">
+            <h3 className="text-lg font-bold text-foreground">Stay Connected</h3>
+            <div className="flex gap-3">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
-                  className="text-primary-foreground hover:text-accent transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <social.icon className="h-6 w-6" />
+                  <social.icon className="h-5 w-5" />
                 </a>
               ))}
             </div>
+          </div>
 
-            {/* Newsletter Signup */}
-            <div className="space-y-2">
-              <p className="text-primary-foreground">
-                Subscribe to our newsletter
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-background text-foreground border-border"
-                />
-                <Button
-                  variant="secondary"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90"
-                >
-                  Subscribe
-                </Button>
-              </div>
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-foreground">Newsletter</h3>
+            <p className="text-sm text-muted-foreground">
+              Subscribe to get updates on new products and offers.
+            </p>
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="bg-background text-foreground border-border"
+              />
+              <Button variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Subscribe
+              </Button>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-lg font-semibold text-primary-foreground">
-                We Accept:
-              </h4>
-
-              <div className="space-y-3">
-                <PaymentMethodGroup
-                  label="Cards"
-                  methods={paymentMethods.cards}
-                />
-                <PaymentMethodGroup
-                  label="Mobile Banking"
-                  methods={paymentMethods.mobileBanking}
-                />
-                <PaymentMethodGroup
-                  label="Banks"
-                  methods={paymentMethods.banks}
-                />
+        <div className="border-t border-border mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold text-foreground">We Accept:</h4>
+              <div className="space-y-2">
+                <PaymentMethodGroup label="Cards" methods={paymentMethods.cards} />
+                <PaymentMethodGroup label="Mobile" methods={paymentMethods.mobileBanking} />
+                <PaymentMethodGroup label="Banks" methods={paymentMethods.banks} />
               </div>
             </div>
-
-            <p className="text-primary-foreground">
-              © 2024 Digital Device Services. All rights reserved.
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} ShibuHub. All rights reserved.
             </p>
           </div>
         </div>
