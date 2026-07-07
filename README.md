@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShibuHub
+
+A full-stack e-commerce storefront + admin dashboard built with Next.js 15, BetterAuth, Drizzle ORM, NeonDB, and Stripe.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router + Turbopack)
+- **Auth**: BetterAuth (email/password with role-based access)
+- **Database**: NeonDB (serverless PostgreSQL) + Drizzle ORM
+- **Payments**: Stripe Checkout + Webhooks
+- **UI**: shadcn/ui (new-york style) + Tailwind CSS v4
+- **State**: React Query v5 + React Context
+- **Package Manager**: Bun
+
+## Features
+
+### Storefront
+- Product browsing with search, category filtering, and pagination
+- Product detail pages with ratings, reviews, and similar products
+- Shopping cart with quantity management (localStorage persistence)
+- Favourites/wishlist
+- Stripe checkout with webhook order confirmation
+- User authentication (signup/signin)
+- Profile with order history
+
+### Admin Dashboard
+- Real-time stats (revenue, orders, customers, products)
+- Product CRUD management
+- Order management with status updates
+- Customer management
+- Team member management
+- Contact form submissions
+- Role-based access control (admin/manager/staff)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- Bun
+- NeonDB account (free tier)
+- Stripe account (test mode)
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repo
+git clone https://github.com/yourusername/shibuhub.git
+cd shibuhub
+
+# Install dependencies
+bun install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your credentials
+
+# Push database schema
+bun run db:push
+
+# Seed database with sample products
+bun run db:seed
+
+# Start development server
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# Database
+DATABASE_URL="postgresql://..."
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# BetterAuth
+BETTER_AUTH_SECRET="your-secret"
+BETTER_AUTH_URL="http://localhost:3000"
 
-## Learn More
+# Stripe
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 
-To learn more about Next.js, take a look at the following resources:
+# App
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database Schema
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **users** - User accounts with roles (admin/manager/staff)
+- **categories** - Product categories
+- **products** - Product catalog with images, pricing, stock
+- **orders** - Customer orders with Stripe integration
+- **order_items** - Individual items in orders
+- **reviews** - Product reviews
+- **favourites** - User wishlists
+- **contact_messages** - Contact form submissions
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+bun run dev          # Development server
+bun run build        # Production build
+bun run lint         # ESLint
+bun run db:push      # Push schema to database
+bun run db:seed      # Seed sample data
+bun run db:studio    # Drizzle Studio (database GUI)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Deploy to Vercel:
+
+1. Push to GitHub
+2. Import project in Vercel
+3. Set environment variables
+4. Configure Stripe webhook endpoint: `https://your-domain.vercel.app/api/webhook`
+5. Deploy
+
+## License
+
+MIT

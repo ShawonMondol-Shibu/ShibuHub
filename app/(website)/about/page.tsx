@@ -60,7 +60,7 @@ export default function Page() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
                     <div className="flex items-center justify-center lg:justify-start gap-2">
                       <span className="font-semibold text-foreground">Age:</span>
-                      <span>21 years old</span>
+                      <span>{new Date().getFullYear()-2004} years old</span>
                     </div>
                     <div className="flex items-center justify-center lg:justify-start gap-2">
                       <span className="font-semibold text-foreground">Education:</span>

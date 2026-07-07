@@ -41,20 +41,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthProvider>
-      <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
         <body className={`${lato.variable} antialiased`}>
+        <AuthProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
             <Provider>{children}</Provider>
             <Toaster position="top-right" richColors />
           </ThemeProvider>
+    </AuthProvider>
         </body>
       </html>
-    </AuthProvider>
   );
 }

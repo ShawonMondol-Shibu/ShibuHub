@@ -5,53 +5,75 @@ import type React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Search, Filter } from "lucide-react";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { LoadingGrid } from "@/components/shared";
 import { ErrorPage } from "@/components/shared";
 import { EmptyState } from "@/components/shared";
 
 export default function Page() {
-  const [Pages, setPages] = useState(1);
   const [search, setSearch] = useState("");
 
-  const getData = async () => {
+  const getData = async ({ pageParam = 0 }: { pageParam: number }) => {
     const res = await fetch(`https://fakestoreapi.com/products`);
-    return res.json();
+    const allProducts = await res.json();
+
+    const filtered = search
+      ? allProducts.filter(
+          (item: { title: string; category: string }) =>
+            item.title.toLowerCase().includes(search.toLowerCase().trim()) ||
+            item.category.toLowerCase().includes(search.toLowerCase().trim())
+        )
+      : allProducts;
+
+    const start = pageParam * 8;
+    return filtered.slice(start, start + 8);
   };
 
-  const { data = [], isLoading, isError, error } = useQuery({
-    queryKey: ["products"],
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["products", search],
     queryFn: getData,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < 8) return undefined;
+      return allPages.length;
+    },
+    initialPageParam: 0,
   });
 
-  const finalData = useMemo(() => {
-    if (!search) return data;
-    const searchTerm = search.toLowerCase().trim();
-    return data.filter(
-      (item: { title: string; category: string }) =>
-        item.title.toLowerCase().includes(searchTerm) ||
-        item.category.toLowerCase().includes(searchTerm)
-    );
-  }, [data, search]);
+  const allProducts = data?.pages.flat() ?? [];
 
-  const productLimit = 8;
-  const paginatedItem = Math.ceil(finalData.length / productLimit);
-  const paginatedData = finalData.slice(
-    (Pages - 1) * productLimit,
-    Pages * productLimit
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastProductRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isFetchingNextPage) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        { rootMargin: "200px" }
+      );
+
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
   );
 
   useEffect(() => {
-    setPages(1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [search]);
 
   if (isLoading) {
@@ -71,14 +93,14 @@ export default function Page() {
     );
   }
 
-  if (isError) {
-    return <ErrorPage message={(error as Error).message} onRetry={() => window.location.reload()} />;
+  if (isError && !data?.pages?.length) {
+    return <ErrorPage message={(error as Error).message} onRetry={() => refetch()} />;
   }
 
   const categorys = ["electronics", "jewelery", "men's clothing", "women's clothing"];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-muted/30 via-background to-muted/30">
+    <main className="min-h-screen bg-linear-to-br from-muted/30 via-background to-muted/30">
       <DynamicBreadcrumb />
       <section className="bg-background border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -131,7 +153,7 @@ export default function Page() {
       </section>
 
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {paginatedData.length === 0 ? (
+        {allProducts.length === 0 ? (
           <EmptyState
             icon={Search}
             title="No Products Found"
@@ -140,10 +162,11 @@ export default function Page() {
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-            {paginatedData.map((item: cardType) => {
+            {allProducts.map((item: cardType, index) => {
               const { id, image, title, description, price } = item;
+              const isLast = index === allProducts.length - 1;
               return (
-                <div key={id}>
+                <div key={id} ref={isLast ? lastProductRef : undefined}>
                   <Product
                     id={id}
                     image={image?.trim()}
@@ -154,47 +177,23 @@ export default function Page() {
                 </div>
               );
             })}
+
+            {isFetchingNextPage && (
+              <div className="col-span-full">
+                <LoadingGrid count={4} />
+              </div>
+            )}
+
+            {isError && hasNextPage && (
+              <div className="col-span-full text-center py-8">
+                <Button onClick={() => fetchNextPage()} variant="outline">
+                  Retry Loading
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </section>
-
-      {finalData.length > productLimit && (
-        <section className="bg-background border-t border-border py-8">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Pagination>
-              <PaginationContent className="gap-2">
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    onClick={() => setPages(Math.max(Pages - 1, 1))}
-                    className="rounded-xl"
-                  />
-                </PaginationItem>
-
-                {Array.from({ length: paginatedItem }).map((_, i) => (
-                  <PaginationItem key={i}>
-                    <Button
-                      variant={Pages === i + 1 ? "default" : "outline"}
-                      onClick={() => setPages(i + 1)}
-                      className="w-12 h-12 rounded-xl"
-                    >
-                      {i + 1}
-                    </Button>
-                  </PaginationItem>
-                ))}
-
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    onClick={() => setPages(Math.min(Pages + 1, paginatedItem))}
-                    className="rounded-xl"
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        </section>
-      )}
     </main>
   );
 }

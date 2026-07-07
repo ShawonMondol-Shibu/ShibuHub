@@ -9,7 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { Eye, Loader2, Pencil, Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -59,6 +60,7 @@ export default function Page() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Price</TableHead>
@@ -70,12 +72,16 @@ export default function Page() {
             {products.map(
               (product: {
                 id: string;
+                image:string;
                 name: string;
                 price: string;
                 stock: number;
                 category?: { name: string } | null;
               }) => (
                 <TableRow key={product.id}>
+                  <TableCell>
+                    <Image src={product.image} alt={product.name} width={50} height={50} />
+                  </TableCell>
                   <TableCell className="font-medium">
                     {product.name.slice(0, 50)}
                   </TableCell>
@@ -100,6 +106,11 @@ export default function Page() {
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
+                      <Button variant={"outline"} size="icon" asChild>
+                        <Link href={`/dashboard/products/${product.id}`}>
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                        </Button>
                     </div>
                   </TableCell>
                 </TableRow>
